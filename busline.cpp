@@ -2,12 +2,13 @@
 #include "linedirection.h"
 #include "busstop.h"
 #include <regex>
+#include <set>
 
 BusLine::BusLine(const std::string &lineName, const std::string &firstStop, const std::string &lastStop) :
         lineName_(lineName),
+        lineNumber_(getLineNumberFromLineName()),
         firstStop_(firstStop),
-        lastStop_(lastStop),
-        lineNumber_(getLineNumberFromLineName())
+        lastStop_(lastStop)
 {}
 
 void BusLine::setName(const std::string &lineName) {
@@ -56,6 +57,8 @@ void BusLine::addStop(BusStop *stop, BusLine::Directions direction) {
     else
         directionB_.add(stop);
 
+    stop->addLine(this);
+
     numberOfStopsInZone_.insert(
             std::pair<int, int>(stop->getZoneID_(), getNumberOfStopsInZone(stop->getZoneID_()) + 1));
 }
@@ -65,8 +68,46 @@ void BusLine::removeStop(BusStop *stop, BusLine::Directions direction) {
         directionA_.remove(stop);
     else
         directionB_.remove(stop);
+
+    stop->removeLine(this);
+
     numberOfStopsInZone_.insert(
             std::pair<int, int>(stop->getZoneID_(), getNumberOfStopsInZone(stop->getZoneID_()) - 1));
+}
+
+std::set<BusLine *, PtrComparator> BusLine::linesWithMutualStops() {
+    auto allStops = getAllStops();
+    std::set<BusLine *, PtrComparator> result;
+
+    for (auto stop : allStops)
+        for (auto line : stop->getLines())
+            if (line != this)
+                result.insert(line);
+    return result;
+}
+
+BusLine *BusLine::lineWithMostMutualStops() {
+    auto allStops = getAllStops();
+    std::map<BusLine *, int> mutualStopsPerLine;
+
+    for (auto stop : allStops)
+        for (auto line : stop->getLines()) {
+            if (line != this)
+                mutualStopsPerLine[line]++;
+        }
+
+    auto x = std::max_element(mutualStopsPerLine.begin(), mutualStopsPerLine.end(),
+                              [](const std::pair<BusLine *, int> &p1, const std::pair<BusLine *, int> &p2) {
+                                  return p1.second < p2.second;
+                              });
+
+    if (x == mutualStopsPerLine.end())
+        return nullptr;
+    return x->first;
+}
+
+bool BusLine::hasStopsInOneDirection(BusStop *firstStop, BusStop *secondStop) const {
+    return directionA_.hasStops(firstStop, secondStop) || directionB_.hasStops(firstStop, secondStop);
 }
 
 void BusLine::writeDirection(BusLine::Directions direction) const {
@@ -87,4 +128,14 @@ int BusLine::getLineNumberFromLineName() {
     std::smatch result;
     std::regex_match(lineName_, result, reg);
     return atoi(result.str(1).c_str());
+}
+
+std::set<BusStop *> BusLine::getAllStops() {
+    auto vect1 = directionA_.getStops();
+    auto vect2 = directionB_.getStops();
+
+    std::set<BusStop*> result;
+    result.insert(vect1.begin(), vect1.end());
+    result.insert(vect2.begin(), vect2.end());
+    return result;
 }

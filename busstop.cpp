@@ -26,3 +26,15 @@ const Location &BusStop::getLocation_() const {
 std::ostream &operator<<(std::ostream &os, const BusStop &s) {
     return os << s.stopID_ << " " << s.stopName_ << " " << s.location_ << " " << s.zoneID_ << " " << std::endl;
 }
+
+std::set<BusLine *> BusStop::getLines() {
+    return lines_;
+}
+
+void BusStop::addLine(BusLine *line) {
+    lines_.insert(line);
+}
+
+void BusStop::removeLine(BusLine *line) {
+    lines_.erase(line);
+}

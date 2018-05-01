@@ -3,7 +3,10 @@
 
 #include <vector>
 #include <iostream>
+#include <set>
+#include <map>
 
+class BusLine;
 class BusStop;
 
 class LineDirection {
@@ -12,6 +15,9 @@ public:
     void remove(BusStop* stop);
 
     unsigned long getNumberOfStops() const;
+    std::vector<BusStop*> getStops();
+
+    bool hasStops(BusStop* firstStop, BusStop* secondStop) const;
 
     friend std::ostream&operator<<(std::ostream&, const LineDirection&);
 

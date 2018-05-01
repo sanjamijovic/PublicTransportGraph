@@ -1,5 +1,6 @@
 #include "linedirection.h"
 #include "busstop.h"
+#include <vector>
 
 
 void LineDirection::add(BusStop *stop) {
@@ -14,8 +15,18 @@ unsigned long LineDirection::getNumberOfStops() const {
     return stops_.size();
 }
 
+std::vector<BusStop *> LineDirection::getStops() {
+    return stops_;
+}
+
 std::ostream &operator<<(std::ostream &os, const LineDirection &l) {
     for (BusStop *s : l.stops_)
         os << *s;
     return os;
+}
+
+bool LineDirection::hasStops(BusStop *firstStop, BusStop *secondStop) const {
+    auto firstResult = std::find(stops_.begin(), stops_.end(), firstStop);
+    auto secondResult = std::find(stops_.begin(), stops_.end(), secondStop);
+    return !(firstResult == stops_.end() || secondResult == stops_.end());
 }

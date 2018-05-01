@@ -6,8 +6,10 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <set>
 
 #include "linedirection.h"
+#include "ptrcomparator.h"
 
 class BusStop;
 
@@ -27,9 +29,12 @@ public:
     const std::string& getFirstStop() const;
     const std::string& getLastStop() const;
 
-
     void addStop(BusStop* stop, Directions direction);
     void removeStop(BusStop* stop, Directions direction);
+
+    std::set<BusLine *, PtrComparator> linesWithMutualStops();
+    BusLine* lineWithMostMutualStops();
+    bool hasStopsInOneDirection(BusStop* firstStop, BusStop* secondStop) const;
 
     void writeDirection(Directions direction) const;  // TODO proveriti da li ovo treba
 
@@ -43,6 +48,7 @@ private:
     std::map<int, int> numberOfStopsInZone_;
 
     int getLineNumberFromLineName();
+    std::set<BusStop*> getAllStops();
 
 };
 

@@ -2,11 +2,10 @@
 #define POOP_P1_BUSSTOP_H
 
 #include <string>
-#include <vector>
+#include <set>
 #include <iostream>
 #include "location.h"
-
-class BusLine;
+#include "busline.h"
 
 class BusStop {
 public:
@@ -18,6 +17,11 @@ public:
     int getZoneID_() const;
     const Location &getLocation_() const;
 
+    std::set<BusLine*> getLines();
+
+    friend void BusLine::addStop(BusStop* stop, Directions direction);
+    friend void BusLine::removeStop(BusStop* stop, Directions direction);
+
     friend std::ostream& operator<<(std::ostream&, const BusStop&);
 
 private:
@@ -25,7 +29,10 @@ private:
     std::string stopName_;
     Location location_;
     int zoneID_;
-    std::vector<BusLine *> lines_;
+    std::set<BusLine *> lines_;
+
+    void addLine(BusLine *line);
+    void removeLine(BusLine *line);
 };
 
 
