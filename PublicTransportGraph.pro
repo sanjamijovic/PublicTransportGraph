@@ -25,10 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        busline.cpp \
+        busstop.cpp \
+        linedirection.cpp \
+        location.cpp \
+        network.cpp \
+        textparser.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        location.h \
+        network.h \
+        textparser.h \
+        ptrcomparator.h \
+        busline.h \
+        busstop.h \
+        linedirection.h
 
 FORMS += \
         mainwindow.ui

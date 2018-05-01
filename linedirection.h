@@ -1,0 +1,23 @@
+#ifndef POOP_P1_LINEDIRECTION_H
+#define POOP_P1_LINEDIRECTION_H
+
+#include <vector>
+#include <iostream>
+
+class BusStop;
+
+class LineDirection {
+public:
+    void add(BusStop* stop);
+    void remove(BusStop* stop);
+
+    unsigned long getNumberOfStops() const;
+
+    friend std::ostream&operator<<(std::ostream&, const LineDirection&);
+
+private:
+    std::vector<BusStop*> stops_;
+};
+
+
+#endif //POOP_P1_LINEDIRECTION_H
