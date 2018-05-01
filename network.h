@@ -6,6 +6,7 @@
 #include <iostream>
 #include "ptrcomparator.h"
 #include "busline.h"
+#include "location.h"
 
 class BusLine;
 class BusStop;
@@ -28,6 +29,8 @@ public:
     void filterByLineNumberGreater(int lower);
     void filterByNumberOfStopsSmaller(int upper);
     void filterByNumberOfStopsGreater(int lower);
+
+    BusStop* nearestStopToLocation(Location location, BusLine* line = nullptr);
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 

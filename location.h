@@ -11,6 +11,8 @@ public:
     double getLatitude() const;
     double  getLongitude() const;
 
+    static double distance(const Location&, const Location&);
+
     friend std::ostream& operator<< (std::ostream&, const Location&);
 
 private:

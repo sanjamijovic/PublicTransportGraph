@@ -31,6 +31,10 @@ std::set<BusLine *> BusStop::getLines() {
     return lines_;
 }
 
+bool BusStop::isStopForLine(BusLine * line) {
+    return lines_.find(line) != lines_.end();
+}
+
 void BusStop::addLine(BusLine *line) {
     lines_.insert(line);
 }

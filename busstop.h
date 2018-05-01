@@ -18,6 +18,7 @@ public:
     const Location &getLocation_() const;
 
     std::set<BusLine*> getLines();
+    bool isStopForLine(BusLine*);
 
     friend void BusLine::addStop(BusStop* stop, Directions direction);
     friend void BusLine::removeStop(BusStop* stop, Directions direction);

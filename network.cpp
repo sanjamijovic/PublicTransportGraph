@@ -1,5 +1,6 @@
 #include "network.h"
 #include "busline.h"
+#include "busstop.h"
 
 
 Network::~Network() {
@@ -89,4 +90,24 @@ void Network::filterIf(std::function<bool(std::set<BusLine *>::iterator)> condit
         else
             busLines_.erase(iter++);
     }
+}
+
+// calculates the nearest stop to location, if line passed must be a stop of that line
+BusStop *Network::nearestStopToLocation(Location location, BusLine *line) {
+    if(line && line->getNumberOfAllStops() == 0)
+        return nullptr;
+    std::vector<BusStop*> stopsOfLine;
+
+    for(auto iter : allBusStops_) {
+        if(!line || iter.second->isStopForLine(line))
+            stopsOfLine.push_back(iter.second);
+    }
+
+    auto result = std::min_element(stopsOfLine.begin(), stopsOfLine.end(), [location](BusStop* stop1, BusStop* stop2) {
+        return Location::distance(location, stop1->getLocation_()) < Location::distance(location, stop2->getLocation_());
+    });
+    if(result == stopsOfLine.end())
+        return nullptr;
+    return *result;
+
 }
