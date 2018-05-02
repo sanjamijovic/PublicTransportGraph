@@ -38,6 +38,8 @@ public:
 
     void writeDirection(Directions direction) const;  // TODO proveriti da li ovo treba
 
+    static unsigned long numOfMutualStops(BusLine*, BusLine*);
+
     friend bool operator<(const BusLine& line1, const BusLine& line2);
 
 private:

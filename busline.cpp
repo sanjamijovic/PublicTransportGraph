@@ -110,6 +110,15 @@ bool BusLine::hasStopsInOneDirection(BusStop *firstStop, BusStop *secondStop) co
     return directionA_.hasStops(firstStop, secondStop) || directionB_.hasStops(firstStop, secondStop);
 }
 
+unsigned long BusLine::numOfMutualStops(BusLine* line1, BusLine* line2) {
+    auto line1Stops = line1->getAllStops();
+    auto line2Stops = line2->getAllStops();
+    std::set<BusStop *> result;
+    std::set_intersection(line1Stops.begin(), line1Stops.end(), line2Stops.begin(), line2Stops.end(),
+                          std::inserter(result, result.begin()));
+    return result.size();
+}
+
 void BusLine::writeDirection(BusLine::Directions direction) const {
     if (direction == Directions::DIRECTION_A)
         std::cout << directionA_;

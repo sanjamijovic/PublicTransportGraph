@@ -2,7 +2,6 @@
 #include "busline.h"
 #include "busstop.h"
 
-
 Network::~Network() {
     for (auto l : busLines_)
         delete l;
@@ -75,13 +74,6 @@ void Network::filterByNumberOfStopsGreater(int lower) {
     });
 }
 
-std::ostream &operator<<(std::ostream &os, const Network &n) {
-    for (BusLine *b : n.busLines_) {
-        os << b->getName() << " " << b->getFirstStop() << " -> " << b->getLastStop() << std::endl;
-    }
-    return os;
-}
-
 void Network::filterIf(std::function<bool(std::set<BusLine *>::iterator)> condition) {
     // keep items which fulfill the condition
     for (auto iter = busLines_.begin(); iter != busLines_.end();) {
@@ -110,4 +102,29 @@ BusStop *Network::nearestStopToLocation(Location location, BusLine *line) {
         return nullptr;
     return *result;
 
+}
+
+std::vector<Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLines(int minStops) {
+    std::vector<pairsOfConnectedLines> result;
+    for(auto line1 : busLines_) {
+        auto linesWithMutualStops = line1->linesWithMutualStops();
+        for(auto line2 : linesWithMutualStops) {
+            unsigned long numOfMutualStops = BusLine::numOfMutualStops(line1, line2);
+            if (*line1 < *line2 && numOfMutualStops >= minStops)
+                result.push_back(std::make_pair(std::make_pair(line1, line2), numOfMutualStops));
+        }
+    }
+
+    std::sort(result.begin(), result.end(), [] (const pairsOfConnectedLines& pair1, const pairsOfConnectedLines& pair2) {
+        return *pair1.first.first < *pair2.first.first;
+    });
+
+    return result;
+}
+
+std::ostream &operator<<(std::ostream &os, const Network &n) {
+    for (BusLine *b : n.busLines_) {
+        os << b->getName() << " " << b->getFirstStop() << " -> " << b->getLastStop() << std::endl;
+    }
+    return os;
 }

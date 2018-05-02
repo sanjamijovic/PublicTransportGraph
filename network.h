@@ -14,6 +14,7 @@ class BusStop;
 class Network {
 public:
     static const int LAST_ZONE = 4;
+    using pairsOfConnectedLines = std::pair<std::pair<BusLine*, BusLine*>, unsigned long>;
 
     ~Network();
 
@@ -31,6 +32,8 @@ public:
     void filterByNumberOfStopsGreater(int lower);
 
     BusStop* nearestStopToLocation(Location location, BusLine* line = nullptr);
+
+    std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(int minStops = 1);
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 
