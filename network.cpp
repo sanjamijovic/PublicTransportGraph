@@ -35,7 +35,7 @@ BusStop *Network::getStop(int stopID) {
 }
 
 // leaves lines which have only stops in zones with smaller id than numOfZones
-void Network::filterByZone(int numOfZones) {
+void Network::filterByZone(unsigned long numOfZones) {
     if (numOfZones <= 0 || numOfZones > LAST_ZONE)
         throw std::invalid_argument("Number of zone isn't valid.");
 
@@ -48,27 +48,27 @@ void Network::filterByZone(int numOfZones) {
     });
 }
 
-void Network::filterByLineNumberRange(int lower, int upper) {
+void Network::filterByLineNumberRange(unsigned long lower, unsigned long upper) {
     filterIf([lower, upper](std::set<BusLine *>::iterator iter) {
         return (*iter)->getLineNumber() >= lower && (*iter)->getLineNumber() <= upper;
     });
 }
 
-void Network::filterByLineNumberSmaller(int upper) {
+void Network::filterByLineNumberSmaller(unsigned long upper) {
     filterByLineNumberRange(0, upper - 1);
 }
 
-void Network::filterByLineNumberGreater(int lower) {
+void Network::filterByLineNumberGreater(unsigned long lower) {
     filterByLineNumberRange(lower + 1, INT_MAX);
 }
 
-void Network::filterByNumberOfStopsSmaller(int upper) {
+void Network::filterByNumberOfStopsSmaller(unsigned long upper) {
     filterIf([upper](std::set<BusLine *>::iterator iter) {
         return (*iter)->getNumberOfAllStops() < upper;
     });
 }
 
-void Network::filterByNumberOfStopsGreater(int lower) {
+void Network::filterByNumberOfStopsGreater(unsigned long lower) {
     filterIf([lower](std::set<BusLine *>::iterator iter) {
         return (*iter)->getNumberOfAllStops() > lower;
     });
@@ -104,7 +104,22 @@ BusStop *Network::nearestStopToLocation(Location location, BusLine *line) {
 
 }
 
-std::vector<Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLines(int minStops) {
+std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
+    std::set<BusStop *, PtrComparator> result;
+    for (auto line : busLines_) {
+        auto nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_A);
+        if(nextStop)
+            result.insert(nextStop);
+        nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_B);
+        if(nextStop)
+            result.insert(nextStop);
+
+    }
+
+    return result;
+}
+
+std::vector<Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLines(unsigned long minStops) {
     std::vector<pairsOfConnectedLines> result;
     for(auto line1 : busLines_) {
         auto linesWithMutualStops = line1->linesWithMutualStops();
@@ -127,19 +142,4 @@ std::ostream &operator<<(std::ostream &os, const Network &n) {
         os << b->getName() << " " << b->getFirstStop() << " -> " << b->getLastStop() << std::endl;
     }
     return os;
-}
-
-std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
-    std::set<BusStop *, PtrComparator> result;
-    for (auto line : busLines_) {
-        auto nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_A);
-        if(nextStop)
-            result.insert(nextStop);
-        nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_B);
-        if(nextStop)
-            result.insert(nextStop);
-
-    }
-
-    return result;
 }

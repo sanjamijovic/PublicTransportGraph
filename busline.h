@@ -1,5 +1,5 @@
-#ifndef POOP_P1_BUSLINE_H
-#define POOP_P1_BUSLINE_H
+#ifndef PUBLICTRANSPORTGRAPH_BUSLINE_H
+#define PUBLICTRANSPORTGRAPH_BUSLINE_H
 
 
 #include <string>
@@ -36,12 +36,10 @@ public:
     BusLine* lineWithMostMutualStops();
     bool hasStopsInOneDirection(BusStop* firstStop, BusStop* secondStop) const;
     BusStop* nextStopInDirection(BusStop* stop, Directions direction);
-
-    void writeDirection(Directions direction) const;  // TODO proveriti da li ovo treba
-
     static unsigned long numOfMutualStops(BusLine*, BusLine*);
 
     friend bool operator<(const BusLine& line1, const BusLine& line2);
+    friend std::ostream& operator<<(std::ostream &os, const BusLine &line);
 
 private:
     std::string lineName_;
@@ -52,8 +50,7 @@ private:
 
     int getLineNumberFromLineName();
     std::set<BusStop*> getAllStops();
-
 };
 
 
-#endif //POOP_P1_BUSLINE_H
+#endif //PUBLICTRANSPORTGRAPH_BUSLINE_H

@@ -1,5 +1,5 @@
-#ifndef POOP_P1_TEXTPARSER_H
-#define POOP_P1_TEXTPARSER_H
+#ifndef PUBLICTRANSPORTGRAPH_TEXTPARSER_H
+#define PUBLICTRANSPORTGRAPH_TEXTPARSER_H
 
 #include <string>
 #include <fstream>
@@ -21,4 +21,4 @@ private:
 };
 
 
-#endif //POOP_P1_TEXTPARSER_H
+#endif //PUBLICTRANSPORTGRAPH_TEXTPARSER_H

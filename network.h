@@ -1,5 +1,5 @@
-#ifndef POOP_P1_NETWORK_H
-#define POOP_P1_NETWORK_H
+#ifndef PUBLICTRANSPORTGRAPH_NETWORK_H
+#define PUBLICTRANSPORTGRAPH_NETWORK_H
 
 #include <set>
 #include <map>
@@ -24,17 +24,16 @@ public:
     BusLine* getLine(const std::string& lineName);
     BusStop* getStop(int stopID);
 
-    void filterByZone(int numOfZones);
-    void filterByLineNumberRange(int lower, int upper);
-    void filterByLineNumberSmaller(int upper);
-    void filterByLineNumberGreater(int lower);
-    void filterByNumberOfStopsSmaller(int upper);
-    void filterByNumberOfStopsGreater(int lower);
+    void filterByZone(unsigned long numOfZones);
+    void filterByLineNumberRange(unsigned long lower, unsigned long upper);
+    void filterByLineNumberSmaller(unsigned long upper);
+    void filterByLineNumberGreater(unsigned long lower);
+    void filterByNumberOfStopsSmaller(unsigned long upper);
+    void filterByNumberOfStopsGreater(unsigned long lower);
 
     BusStop* nearestStopToLocation(Location location, BusLine* line = nullptr);
     std::set<BusStop*, PtrComparator> allNextStops(BusStop* stop);
-
-    std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(int minStops = 1);
+    std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(unsigned long minStops = 1);
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 
@@ -46,4 +45,4 @@ private:
 };
 
 
-#endif //POOP_P1_NETWORK_H
+#endif //PUBLICTRANSPORTGRAPH_NETWORK_H

@@ -23,8 +23,12 @@ const Location &BusStop::getLocation_() const {
     return location_;
 }
 
+bool operator<(const BusStop &stop1, const BusStop &stop2) {
+    return stop1.stopID_ < stop2.stopID_;
+}
+
 std::ostream &operator<<(std::ostream &os, const BusStop &s) {
-    return os << s.stopID_ << " " << s.stopName_ << " " << s.location_ << " " << s.zoneID_ << " " << std::endl;
+    return os << s.stopID_ << " " << s.stopName_ << " " << s.location_ << " " << s.zoneID_ ;
 }
 
 std::set<BusLine *> BusStop::getLines() {
@@ -41,8 +45,4 @@ void BusStop::addLine(BusLine *line) {
 
 void BusStop::removeLine(BusLine *line) {
     lines_.erase(line);
-}
-
-bool operator<(const BusStop &stop1, const BusStop &stop2) {
-    return stop1.stopID_ < stop2.stopID_;
 }

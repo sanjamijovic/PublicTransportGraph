@@ -17,10 +17,7 @@ void BusLine::setName(const std::string &lineName) {
 }
 
 unsigned long BusLine::getNumberOfStops(BusLine::Directions direction) const {
-    if (direction == Directions::DIRECTION_A)
-        return directionA_.getNumberOfStops();
-    else
-        return directionB_.getNumberOfStops();
+    return (direction == DIRECTION_A ? directionA_ : directionB_).getNumberOfStops();
 }
 
 unsigned long BusLine::getNumberOfAllStops() const {
@@ -52,10 +49,7 @@ const std::string& BusLine::getLastStop() const {
 }
 
 void BusLine::addStop(BusStop *stop, BusLine::Directions direction) {
-    if (direction == Directions::DIRECTION_A)
-        directionA_.add(stop);
-    else
-        directionB_.add(stop);
+    (direction == DIRECTION_A ? directionA_ : directionB_).add(stop);
 
     stop->addLine(this);
 
@@ -64,10 +58,7 @@ void BusLine::addStop(BusStop *stop, BusLine::Directions direction) {
 }
 
 void BusLine::removeStop(BusStop *stop, BusLine::Directions direction) {
-    if (direction == Directions::DIRECTION_A)
-        directionA_.remove(stop);
-    else
-        directionB_.remove(stop);
+    (direction == DIRECTION_A ? directionA_ : directionB_).remove(stop);
 
     stop->removeLine(this);
 
@@ -110,6 +101,10 @@ bool BusLine::hasStopsInOneDirection(BusStop *firstStop, BusStop *secondStop) co
     return directionA_.hasStops(firstStop, secondStop) || directionB_.hasStops(firstStop, secondStop);
 }
 
+BusStop *BusLine::nextStopInDirection(BusStop *stop, BusLine::Directions direction) {
+    return (direction == DIRECTION_A ? directionA_ : directionB_).nextStop(stop);
+}
+
 unsigned long BusLine::numOfMutualStops(BusLine* line1, BusLine* line2) {
     auto line1Stops = line1->getAllStops();
     auto line2Stops = line2->getAllStops();
@@ -117,13 +112,6 @@ unsigned long BusLine::numOfMutualStops(BusLine* line1, BusLine* line2) {
     std::set_intersection(line1Stops.begin(), line1Stops.end(), line2Stops.begin(), line2Stops.end(),
                           std::inserter(result, result.begin()));
     return result.size();
-}
-
-void BusLine::writeDirection(BusLine::Directions direction) const {
-    if (direction == Directions::DIRECTION_A)
-        std::cout << directionA_;
-    else
-        std::cout << directionB_;
 }
 
 bool operator<(const BusLine &line1, const BusLine &line2) {
@@ -149,6 +137,8 @@ std::set<BusStop *> BusLine::getAllStops() {
     return result;
 }
 
-BusStop *BusLine::nextStopInDirection(BusStop *stop, BusLine::Directions direction) {
-    return (direction == BusLine::DIRECTION_A ? directionA_ : directionB_).nextStop(stop);
+
+std::ostream &operator<<(std::ostream &os, const BusLine &line) {
+    return os << "Direction A : " << std::endl <<  line.directionA_  << std::endl
+              << "Direction B : " << std::endl << line.directionB_;
 }

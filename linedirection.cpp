@@ -34,6 +34,6 @@ BusStop *LineDirection::nextStop(BusStop *stop) {
 
 std::ostream &operator<<(std::ostream &os, const LineDirection &l) {
     for (BusStop *s : l.stops_)
-        os << *s;
+        os << *s << std::endl;
     return os;
 }

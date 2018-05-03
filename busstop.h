@@ -1,5 +1,5 @@
-#ifndef POOP_P1_BUSSTOP_H
-#define POOP_P1_BUSSTOP_H
+#ifndef PUBLICTRANSPORTGRAPH_BUSSTOP_H
+#define PUBLICTRANSPORTGRAPH_BUSSTOP_H
 
 #include <string>
 #include <set>
@@ -38,4 +38,4 @@ private:
 };
 
 
-#endif //POOP_P1_BUSSTOP_H
+#endif //PUBLICTRANSPORTGRAPH_BUSSTOP_H

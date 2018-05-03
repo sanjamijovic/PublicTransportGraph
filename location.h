@@ -1,5 +1,5 @@
-#ifndef POOP_P1_LOCATION_H
-#define POOP_P1_LOCATION_H
+#ifndef PUBLICTRANSPORTGRAPH_LOCATION_H
+#define PUBLICTRANSPORTGRAPH_LOCATION_H
 
 
 #include <iostream>
@@ -20,4 +20,4 @@ private:
 };
 
 
-#endif //POOP_P1_LOCATION_H
+#endif //PUBLICTRANSPORTGRAPH_LOCATION_H
