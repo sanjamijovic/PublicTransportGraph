@@ -35,6 +35,7 @@ public:
     std::set<BusStop*, PtrComparator> allNextStops(BusStop* stop);
     std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(unsigned long minStops = 1);
     unsigned long shortestPath(BusStop*, BusStop*);
+    unsigned long numOfStopovers(BusStop*, BusStop*);
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 

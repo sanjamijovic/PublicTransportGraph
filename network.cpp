@@ -162,6 +162,36 @@ unsigned long Network::shortestPath(BusStop * first, BusStop * last) {
     return ULONG_MAX;
 }
 
+unsigned long Network::numOfStopovers(BusStop * first, BusStop * last) {
+    std::map<BusLine*, unsigned long> visitedLines; // keeps the number of overlays in path for visited lines
+    std::queue<BusLine *> lines;
+
+    auto linesForStop= first->getLines();
+    for (auto line : linesForStop) {
+        if(last->isStopForLine(line))
+            return 0;
+        visitedLines[line] = 0;
+        lines.push(line);
+    }
+
+    while(!lines.empty()) {
+        BusLine* currentLine = lines.front();
+        lines.pop();
+
+        auto connectedLines = currentLine->linesWithMutualStops();
+        for(auto line : connectedLines) {
+            if(last->isStopForLine(line))
+                return visitedLines[line] + 1;
+            if (visitedLines.count(line) == 0) {
+                visitedLines[line] = visitedLines[currentLine] + 1;
+                lines.push(line);
+            }
+        }
+    }
+
+    return ULONG_MAX;
+}
+
 std::ostream &operator<<(std::ostream &os, const Network &n) {
     for (BusLine *b : n.busLines_) {
         os << b->getName() << " " << b->getFirstStop() << " -> " << b->getLastStop() << std::endl;
