@@ -1,3 +1,4 @@
+#include <queue>
 #include "network.h"
 #include "busline.h"
 #include "busstop.h"
@@ -106,7 +107,8 @@ BusStop *Network::nearestStopToLocation(Location location, BusLine *line) {
 
 std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
     std::set<BusStop *, PtrComparator> result;
-    for (auto line : busLines_) {
+    auto lines = stop->getLines();
+    for (auto line : lines) {
         auto nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_A);
         if(nextStop)
             result.insert(nextStop);
@@ -135,6 +137,29 @@ std::vector<Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLin
     });
 
     return result;
+}
+
+unsigned long Network::shortestPath(BusStop * first, BusStop * last) {
+    std::map<BusStop*, unsigned long> visitedStops; // keeps the number of stops in path for visited stops
+    std::queue<BusStop *> stops;
+
+    visitedStops[first] =  0;
+    stops.push(first);
+    while(!stops.empty()) {
+        BusStop* currentStop = stops.front();
+        stops.pop();
+
+        auto nextStops = allNextStops(currentStop);
+        for(auto nextStop : nextStops) {
+            if(nextStop == last)
+                return visitedStops[currentStop] + 1;
+            if (visitedStops.count(nextStop) == 0) {
+                visitedStops[nextStop] = visitedStops[currentStop] + 1;
+                stops.push(nextStop);
+            }
+        }
+    }
+    return ULONG_MAX;
 }
 
 std::ostream &operator<<(std::ostream &os, const Network &n) {

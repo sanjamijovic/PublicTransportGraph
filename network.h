@@ -34,6 +34,7 @@ public:
     BusStop* nearestStopToLocation(Location location, BusLine* line = nullptr);
     std::set<BusStop*, PtrComparator> allNextStops(BusStop* stop);
     std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(unsigned long minStops = 1);
+    unsigned long shortestPath(BusStop*, BusStop*);
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 
