@@ -32,6 +32,7 @@ public:
     void filterByNumberOfStopsGreater(int lower);
 
     BusStop* nearestStopToLocation(Location location, BusLine* line = nullptr);
+    std::set<BusStop*, PtrComparator> allNextStops(BusStop* stop);
 
     std::vector<pairsOfConnectedLines> mutualStopsForAllPairsOfLines(int minStops = 1);
 

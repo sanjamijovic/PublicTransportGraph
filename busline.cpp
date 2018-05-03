@@ -148,3 +148,7 @@ std::set<BusStop *> BusLine::getAllStops() {
     result.insert(vect2.begin(), vect2.end());
     return result;
 }
+
+BusStop *BusLine::nextStopInDirection(BusStop *stop, BusLine::Directions direction) {
+    return (direction == BusLine::DIRECTION_A ? directionA_ : directionB_).nextStop(stop);
+}

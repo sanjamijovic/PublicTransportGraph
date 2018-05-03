@@ -18,6 +18,7 @@ public:
     std::vector<BusStop*> getStops();
 
     bool hasStops(BusStop* firstStop, BusStop* secondStop) const;
+    BusStop* nextStop(BusStop* stop);
 
     friend std::ostream&operator<<(std::ostream&, const LineDirection&);
 

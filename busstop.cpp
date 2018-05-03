@@ -42,3 +42,7 @@ void BusStop::addLine(BusLine *line) {
 void BusStop::removeLine(BusLine *line) {
     lines_.erase(line);
 }
+
+bool operator<(const BusStop &stop1, const BusStop &stop2) {
+    return stop1.stopID_ < stop2.stopID_;
+}

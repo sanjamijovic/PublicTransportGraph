@@ -128,3 +128,18 @@ std::ostream &operator<<(std::ostream &os, const Network &n) {
     }
     return os;
 }
+
+std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
+    std::set<BusStop *, PtrComparator> result;
+    for (auto line : busLines_) {
+        auto nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_A);
+        if(nextStop)
+            result.insert(nextStop);
+        nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_B);
+        if(nextStop)
+            result.insert(nextStop);
+
+    }
+
+    return result;
+}

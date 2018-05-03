@@ -23,6 +23,7 @@ public:
     friend void BusLine::addStop(BusStop* stop, Directions direction);
     friend void BusLine::removeStop(BusStop* stop, Directions direction);
 
+    friend bool operator<(const BusStop& stop1, const BusStop& stop2);
     friend std::ostream& operator<<(std::ostream&, const BusStop&);
 
 private:

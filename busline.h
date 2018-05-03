@@ -35,6 +35,7 @@ public:
     std::set<BusLine *, PtrComparator> linesWithMutualStops();
     BusLine* lineWithMostMutualStops();
     bool hasStopsInOneDirection(BusStop* firstStop, BusStop* secondStop) const;
+    BusStop* nextStopInDirection(BusStop* stop, Directions direction);
 
     void writeDirection(Directions direction) const;  // TODO proveriti da li ovo treba
 
