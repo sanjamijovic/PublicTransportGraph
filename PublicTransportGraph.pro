@@ -37,7 +37,9 @@ SOURCES += \
         cgraphgenerator.cpp \
         outputfileformater.cpp \
         gmloutput.cpp \
-        csvoutput.cpp
+        csvoutput.cpp \
+        lineinfowindow.cpp \
+    directiontabwidget.cpp
 
 
 HEADERS += \
@@ -55,8 +57,12 @@ HEADERS += \
         outputfileformater.h \
         gmloutput.h \
         csvoutput.h \
-        node.h
+        node.h \
+        lineinfowindow.h \
+    directiontabwidget.h
 
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    lineinfowindow.ui \
+    directiontabwidget.ui

@@ -26,6 +26,7 @@ public:
 
     BusLine* getLine(const std::string& lineName);
     BusStop* getStop(int stopID);
+    std::vector<std::string>  getAllLineNames() const;
 
     void filterByZone(unsigned long numOfZones);
     void filterByLineNumberRange(unsigned long lower, unsigned long upper);

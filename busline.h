@@ -17,6 +17,7 @@ class BusStop;
 class BusLine : public Node {
 
 public:
+    friend class LineInfoWindow;
     enum Directions { DIRECTION_A, DIRECTION_B };
 
     BusLine(const std::string& lineName, const std::string& firstStop, const std::string& lastStop);

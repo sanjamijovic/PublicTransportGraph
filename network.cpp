@@ -35,6 +35,13 @@ BusStop *Network::getStop(int stopID) {
     return iter->second;
 }
 
+std::vector<std::string>  Network::getAllLineNames() const {
+    std::vector<std::string>  result;
+    for(auto line : busLines_)
+        result.push_back(line->getName());
+    return result;
+}
+
 // leaves lines which have only stops in zones with smaller id than numOfZones
 void Network::filterByZone(unsigned long numOfZones) {
     if (numOfZones <= 0 || numOfZones > LAST_ZONE)
