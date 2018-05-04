@@ -13,6 +13,9 @@ class BusStop;
 
 class Network {
 public:
+    friend class LGraphGenerator;
+    friend class CGraphGenerator;
+
     static const int LAST_ZONE = 4;
     using pairsOfConnectedLines = std::pair<std::pair<BusLine*, BusLine*>, unsigned long>;
 

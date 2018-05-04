@@ -6,8 +6,9 @@
 #include <iostream>
 #include "location.h"
 #include "busline.h"
+#include "node.h"
 
-class BusStop {
+class BusStop : public Node {
 public:
 
     BusStop(int stopID, const std::string& stopName, Location location, int zoneID);
@@ -25,6 +26,8 @@ public:
 
     friend bool operator<(const BusStop& stop1, const BusStop& stop2);
     friend std::ostream& operator<<(std::ostream&, const BusStop&);
+
+    std::string label() const override;
 
 private:
     int stopID_;

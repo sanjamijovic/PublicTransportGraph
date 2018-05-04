@@ -10,10 +10,11 @@
 
 #include "linedirection.h"
 #include "ptrcomparator.h"
+#include "node.h"
 
 class BusStop;
 
-class BusLine {
+class BusLine : public Node {
 
 public:
     enum Directions { DIRECTION_A, DIRECTION_B };
@@ -40,6 +41,8 @@ public:
 
     friend bool operator<(const BusLine& line1, const BusLine& line2);
     friend std::ostream& operator<<(std::ostream &os, const BusLine &line);
+
+    std::string label() const override;
 
 private:
     std::string lineName_;

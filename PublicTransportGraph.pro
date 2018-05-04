@@ -31,7 +31,14 @@ SOURCES += \
         linedirection.cpp \
         location.cpp \
         network.cpp \
-        textparser.cpp
+        textparser.cpp \
+        graphformatgenerator.cpp \
+        lgraphgenerator.cpp \
+        cgraphgenerator.cpp \
+        outputfileformater.cpp \
+        gmloutput.cpp \
+        csvoutput.cpp
+
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +48,15 @@ HEADERS += \
         ptrcomparator.h \
         busline.h \
         busstop.h \
-        linedirection.h
+        linedirection.h \
+        graphformatgenerator.h \
+        lgraphgenerator.h \
+        cgraphgenerator.h \
+        outputfileformater.h \
+        gmloutput.h \
+        csvoutput.h \
+        node.h
+
 
 FORMS += \
         mainwindow.ui

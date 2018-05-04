@@ -39,6 +39,10 @@ bool BusStop::isStopForLine(BusLine * line) {
     return lines_.find(line) != lines_.end();
 }
 
+std::string BusStop::label() const {
+    return std::to_string(stopID_);
+}
+
 void BusStop::addLine(BusLine *line) {
     lines_.insert(line);
 }

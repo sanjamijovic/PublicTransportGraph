@@ -127,6 +127,11 @@ int BusLine::getLineNumberFromLineName() {
     return atoi(result.str(1).c_str());
 }
 
+std::string BusLine::label() const {
+    return lineName_;
+}
+
+
 std::set<BusStop *> BusLine::getAllStops() {
     auto vect1 = directionA_.getStops();
     auto vect2 = directionB_.getStops();
@@ -136,7 +141,6 @@ std::set<BusStop *> BusLine::getAllStops() {
     result.insert(vect2.begin(), vect2.end());
     return result;
 }
-
 
 std::ostream &operator<<(std::ostream &os, const BusLine &line) {
     return os << "Direction A : " << std::endl <<  line.directionA_  << std::endl
