@@ -45,7 +45,8 @@ SOURCES += \
     filterdialog.cpp \
     deletedialog.cpp \
     connectedlinesdialog.cpp \
-    textwidget.cpp
+    textwidget.cpp \
+    connectedpairsdialog.cpp
 
 
 HEADERS += \
@@ -71,7 +72,8 @@ HEADERS += \
     filterdialog.h \
     deletedialog.h \
     connectedlinesdialog.h \
-    textwidget.h
+    textwidget.h \
+    connectedpairsdialog.h
 
 
 FORMS += \
@@ -83,4 +85,5 @@ FORMS += \
     filterdialog.ui \
     deletedialog.ui \
     connectedlinesdialog.ui \
-    textwidget.ui
+    textwidget.ui \
+    connectedpairsdialog.ui

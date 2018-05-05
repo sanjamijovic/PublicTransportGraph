@@ -30,6 +30,7 @@ private:
     QAction *filterAct;
     QAction *deleteAct;
     QAction *showConnectedAct;
+    QAction *showConnectedPairsAct;
 
     void createActions();
     void createMenus();
@@ -44,6 +45,7 @@ private slots:
     void deleteLine();
 
     void showConnectedLines();
+    void showConnectedPairs();
 
 };
 

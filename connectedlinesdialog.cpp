@@ -31,8 +31,8 @@ void ConnectedLinesDialog::acc()
     else{
         auto result = line->linesWithMutualStops();
         std::stringstream ss;
-        for(auto line : result)
-            ss << *line << std::endl;
+        for(auto l : result)
+            ss << *l << std::endl;
         TextWidget* text = new TextWidget(QString::fromStdString(ss.str()));
         text->show();
     }
