@@ -34,14 +34,14 @@ void LineInfoWindow::makeTable(DirectionTabWidget* direction, BusLine::Direction
 
     unsigned long numOfCollumns = line_->getNumberOfStops(lineDir);
     direction->stopsTable()->setRowCount(numOfCollumns);
-    direction->stopsTable()->setColumnCount(5);
+    direction->stopsTable()->setColumnCount(6);
     direction->stopsTable()->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     for(int i = 0; i < direction->stopsTable()->horizontalHeader()->count(); i++)
         direction->stopsTable()->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     QStringList tableHeader;
-    tableHeader << "Stop ID" << "Stop Name" << "Latitude" << "Longitude" << "Zone ID";
+    tableHeader << "Stop ID" << "Stop Name" << "Latitude" << "Longitude" << "Zone ID" << "Lines";
     direction->stopsTable()->setHorizontalHeaderLabels(tableHeader);
 
     int i = 0;

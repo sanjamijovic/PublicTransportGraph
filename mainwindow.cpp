@@ -11,6 +11,7 @@
 #include "deletedialog.h"
 #include "connectedlinesdialog.h"
 #include "connectedpairsdialog.h"
+#include "lineforstopdialog.h"
 
 #include <iostream>
 
@@ -56,6 +57,9 @@ void MainWindow::createActions()
     showConnectedPairsAct = new QAction(tr("&Show connected pairs"), this);
     connect(showConnectedPairsAct, &QAction::triggered, this, &MainWindow::showConnectedPairs);
 
+    showLinesForStopAct = new QAction(tr("&Show lines for stop"), this);
+    connect(showLinesForStopAct, &QAction::triggered, this, &MainWindow::showLinesForStop);
+
 }
 
 void MainWindow::createMenus()
@@ -72,6 +76,7 @@ void MainWindow::createMenus()
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction(showConnectedAct);
     viewMenu->addAction(showConnectedPairsAct);
+    viewMenu->addAction(showLinesForStopAct);
 }
 
 void MainWindow::open() {
@@ -122,6 +127,12 @@ void MainWindow::showConnectedPairs()
 {
     ConnectedPairsDialog* pairsDialog = new ConnectedPairsDialog(network_);
     pairsDialog->show();
+}
+
+void MainWindow::showLinesForStop()
+{
+    LineForStopDialog* lineForStopDialog = new LineForStopDialog(network_);
+    lineForStopDialog->show();
 }
 
 void MainWindow::drawWindow() {
