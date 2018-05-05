@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 #include "textparser.h"
 #include "lineinfowindow.h"
+#include "savedialog.h"
 
 #include <iostream>
 
@@ -29,12 +30,17 @@ void MainWindow::createActions()
     openAct = new QAction(tr("&Open"), this);
     openAct->setShortcuts(QKeySequence::Open);
     connect(openAct, &QAction::triggered, this, &MainWindow::open);
+
+    saveAct = new QAction(tr("&Save"), this);
+    saveAct->setShortcuts(QKeySequence::Save);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 }
 
 void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openAct);
+    fileMenu->addAction(saveAct);
 }
 
 void MainWindow::open() {
@@ -59,4 +65,10 @@ void MainWindow::handleButton(const std::string& lineName) {
     auto line = network_.getLine(lineName);
     LineInfoWindow *lineWindow = new LineInfoWindow(line);
     lineWindow->show();
+}
+
+void MainWindow::save() {
+    SaveDialog *dialog = new SaveDialog(network_);
+    dialog->show();
+
 }

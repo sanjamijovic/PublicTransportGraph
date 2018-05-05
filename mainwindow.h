@@ -23,6 +23,7 @@ private:
 
     QMenu *fileMenu;
     QAction *openAct;
+    QAction *saveAct;
 
     void createActions();
     void createMenus();
@@ -30,6 +31,7 @@ private:
 private slots:
     void open();
     void handleButton(const std::string& lineName);
+    void save();
 };
 
 #endif // MAINWINDOW_H

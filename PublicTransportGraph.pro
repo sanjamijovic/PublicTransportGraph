@@ -39,7 +39,8 @@ SOURCES += \
         gmloutput.cpp \
         csvoutput.cpp \
         lineinfowindow.cpp \
-    directiontabwidget.cpp
+    directiontabwidget.cpp \
+    savedialog.cpp
 
 
 HEADERS += \
@@ -59,10 +60,12 @@ HEADERS += \
         csvoutput.h \
         node.h \
         lineinfowindow.h \
-    directiontabwidget.h
+    directiontabwidget.h \
+    savedialog.h
 
 
 FORMS += \
         mainwindow.ui \
     lineinfowindow.ui \
-    directiontabwidget.ui
+    directiontabwidget.ui \
+    savedialog.ui
