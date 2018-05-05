@@ -7,6 +7,8 @@
 #include "lineinfowindow.h"
 #include "savedialog.h"
 #include "addlinedialog.h"
+#include "filterdialog.h"
+#include "deletedialog.h"
 
 #include <iostream>
 
@@ -39,6 +41,13 @@ void MainWindow::createActions()
     newAct = new QAction(tr("&Add new line"), this);
     newAct->setShortcuts(QKeySequence::New);
     connect(newAct, &QAction::triggered, this, &MainWindow::newLine);
+
+    filterAct = new QAction(tr("&Filter lines"), this);
+    connect(filterAct, &QAction::triggered, this, &MainWindow::filter);
+
+    deleteAct = new QAction(tr("&Delete line"), this);
+    connect(deleteAct, &QAction::triggered, this, &MainWindow::deleteLine);
+
 }
 
 void MainWindow::createMenus()
@@ -49,6 +58,8 @@ void MainWindow::createMenus()
 
     editMenu = menuBar()->addMenu(tr("&Edit"));
     editMenu->addAction(newAct);
+    editMenu->addAction(filterAct);
+    editMenu->addAction(deleteAct);
 }
 
 void MainWindow::open() {
@@ -56,17 +67,8 @@ void MainWindow::open() {
              tr("Open network file"), "/", tr("Text Files (*.txt)"));
     TextParser parser(network_);
     parser.collectData(fileName.toUtf8().constData());
+    drawWindow();
 
-    auto allLineNames = network_.getAllLineNames();
-    unsigned long numOfCollumns = size().width() / 150;
-
-    int i = 0;
-    for (auto name : allLineNames) {
-        auto button = new QPushButton(QString::fromStdString(name));
-        connect(button, &QPushButton::released, this, [this, name] { handleButton(name); });
-        ui->linesGrid->addWidget(button,  i/ numOfCollumns, i % numOfCollumns);
-        i++;
-    }
 }
 
 void MainWindow::handleButton(const std::string& lineName) {
@@ -82,6 +84,37 @@ void MainWindow::save() {
 }
 
 void MainWindow::newLine() {
-    AddLineDialog* addDialog = new AddLineDialog(network_);
+    AddLineDialog* addDialog = new AddLineDialog(network_, [this] { drawWindow(); });
     addDialog->show();
+}
+
+void MainWindow::filter()
+{
+    FilterDialog* filterDialog = new FilterDialog(network_, [this] {drawWindow();});
+    filterDialog->show();
+}
+
+void MainWindow::deleteLine()
+{
+    DeleteDialog* deleteDialog = new DeleteDialog(network_, [this] {drawWindow();});
+    deleteDialog->show();
+}
+
+void MainWindow::drawWindow() {
+    QLayoutItem *child;
+    while ((child = ui->linesGrid->takeAt(0)) != 0)  {
+        delete child->widget();
+        delete child;
+    }
+
+    auto allLineNames = network_.getAllLineNames();
+    unsigned long numOfCollumns = size().width() / 150;
+
+    int i = 0;
+    for (auto name : allLineNames) {
+        auto button = new QPushButton(QString::fromStdString(name));
+        connect(button, &QPushButton::released, this, [this, name] { handleButton(name); });
+        ui->linesGrid->addWidget(button,  i/ numOfCollumns, i % numOfCollumns);
+        i++;
+    }
 }

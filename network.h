@@ -5,7 +5,6 @@
 #include <map>
 #include <iostream>
 #include "ptrcomparator.h"
-#include "busline.h"
 #include "location.h"
 
 class BusLine;
@@ -22,6 +21,7 @@ public:
     ~Network();
 
     void addLine(BusLine*);
+    void removeLine(BusLine*);
     void addStop(int stopID, BusStop* stop);
 
     BusLine* getLine(const std::string& lineName);

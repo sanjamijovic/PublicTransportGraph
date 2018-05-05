@@ -1,6 +1,7 @@
 #include "cgraphgenerator.h"
 
 #include "network.h"
+#include "busline.h"
 
 CGraphGenerator::CGraphGenerator(Network & network) : GraphFormatGenerator(network) {
     loadNodes();
@@ -12,7 +13,7 @@ bool CGraphGenerator::directed() const {
 
 // stops represent nodes
 void CGraphGenerator::loadNodes() {
-    for(const auto& line : network_.busLines_)
+    for(auto line : network_.busLines_)
         nodes_.insert(line);
 
 }

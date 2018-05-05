@@ -11,6 +11,7 @@
 #include "linedirection.h"
 #include "ptrcomparator.h"
 #include "node.h"
+#include "network.h"
 
 class BusStop;
 
@@ -45,6 +46,7 @@ public:
 
     friend bool operator<(const BusLine& line1, const BusLine& line2);
     friend std::ostream& operator<<(std::ostream &os, const BusLine &line);
+    friend void Network::removeLine(BusLine *);
 
     std::string label() const override;
 

@@ -41,7 +41,9 @@ SOURCES += \
         lineinfowindow.cpp \
     directiontabwidget.cpp \
     savedialog.cpp \
-    addlinedialog.cpp
+    addlinedialog.cpp \
+    filterdialog.cpp \
+    deletedialog.cpp
 
 
 HEADERS += \
@@ -63,7 +65,9 @@ HEADERS += \
         lineinfowindow.h \
     directiontabwidget.h \
     savedialog.h \
-    addlinedialog.h
+    addlinedialog.h \
+    filterdialog.h \
+    deletedialog.h
 
 
 FORMS += \
@@ -71,4 +75,6 @@ FORMS += \
     lineinfowindow.ui \
     directiontabwidget.ui \
     savedialog.ui \
-    addlinedialog.ui
+    addlinedialog.ui \
+    filterdialog.ui \
+    deletedialog.ui

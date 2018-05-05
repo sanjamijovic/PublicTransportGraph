@@ -15,6 +15,14 @@ void Network::addLine(BusLine *line) {
     busLines_.insert(line);
 }
 
+void Network::removeLine(BusLine *line)
+{
+    for(auto stop : line->getAllStops())
+        stop->removeLine(line);
+    busLines_.erase(line);
+    delete line;
+}
+
 void Network::addStop(int stopID, BusStop *stop) {
     allBusStops_.insert(std::pair<int, BusStop *>(stopID, stop));
 }

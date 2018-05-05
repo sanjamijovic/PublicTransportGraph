@@ -9,12 +9,14 @@ namespace Ui {
 class AddLineDialog;
 }
 
+class MainWindow;
+
 class AddLineDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AddLineDialog(Network& network, QWidget *parent = 0);
+    explicit AddLineDialog(Network& network, std::function<void(void)> draw, QWidget* parent = 0);
     ~AddLineDialog();
 
 private:
@@ -22,6 +24,7 @@ private:
     Network& network_;
     QString fileNameDirectionA = "";
     QString fileNameDirectionB = "";
+    std::function<void(void)> draw_;
 
 private slots:
     void acc();

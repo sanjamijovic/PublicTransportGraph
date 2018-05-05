@@ -73,7 +73,14 @@
          <number>4</number>
         </property>
         <item row="0" column="0">
-         <layout class="QGridLayout" name="linesGrid"/>
+         <layout class="QGridLayout" name="linesGrid">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <property name="horizontalSpacing">
+           <number>-1</number>
+          </property>
+         </layout>
         </item>
        </layout>
       </widget>

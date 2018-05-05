@@ -7,6 +7,7 @@
 #include "location.h"
 #include "busline.h"
 #include "node.h"
+#include "network.h"
 
 class BusStop : public Node {
 public:
@@ -24,6 +25,7 @@ public:
     friend void BusLine::addStop(BusStop* stop, Directions direction);
     friend void BusLine::removeStop(BusStop* stop, Directions direction);
     friend void BusLine::removeAllStops();
+    friend void Network::removeLine(BusLine *);
 
     friend bool operator<(const BusStop& stop1, const BusStop& stop2);
     friend std::ostream& operator<<(std::ostream&, const BusStop&);

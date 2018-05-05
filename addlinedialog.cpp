@@ -3,14 +3,16 @@
 #include "network.h"
 #include "busline.h"
 #include "textparser.h"
+#include "mainwindow.h"
 #include <QFileDialog>
 #include <QAction>
 #include <QMessageBox>
 
-AddLineDialog::AddLineDialog(Network& network, QWidget *parent) :
+AddLineDialog::AddLineDialog(Network& network, std::function<void(void)> draw, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddLineDialog),
-    network_(network)
+    network_(network),
+    draw_(draw)
 {
     ui->setupUi(this);
     connect(ui->dirAButton, SIGNAL(clicked(bool)), this, SLOT(dirA()));
@@ -29,6 +31,7 @@ void AddLineDialog::acc()
         BusLine* line;
         if((line = network_.getLine(ui->lineName->text().toStdString())) == nullptr) {
             line = new BusLine(ui->lineName->text().toStdString(), ui->firstStop->text().toStdString(), ui->lastStop->text().toStdString());
+            network_.addLine(line);
         }
         else {
             line->removeAllStops();
@@ -38,13 +41,13 @@ void AddLineDialog::acc()
         TextParser parser(network_);
         parser.collectStopsData(fileNameDirectionA.toStdString(), line, BusLine::DIRECTION_A);
         parser.collectStopsData(fileNameDirectionB.toStdString(), line, BusLine::DIRECTION_B);
+        draw_();
     }
     else {
         QMessageBox* message = new QMessageBox();
         message->setText("Files not specified");
         message->show();
     }
-
 }
 
 void AddLineDialog::dirA()
