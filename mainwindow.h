@@ -23,11 +23,13 @@ private:
 
     QMenu *fileMenu;
     QMenu *editMenu;
+    QMenu *viewMenu;
     QAction *openAct;
     QAction *saveAct;
     QAction *newAct;
     QAction *filterAct;
     QAction *deleteAct;
+    QAction *showConnectedAct;
 
     void createActions();
     void createMenus();
@@ -40,6 +42,9 @@ private slots:
     void newLine();
     void filter();
     void deleteLine();
+
+    void showConnectedLines();
+
 };
 
 #endif // MAINWINDOW_H

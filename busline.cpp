@@ -161,6 +161,5 @@ std::set<BusStop *> BusLine::getAllStops() {
 }
 
 std::ostream &operator<<(std::ostream &os, const BusLine &line) {
-    return os << "Direction A : " << std::endl <<  line.directionA_  << std::endl
-              << "Direction B : " << std::endl << line.directionB_;
+    return os << line.getName() << " : " << line.firstStop_ << " -> " << line.lastStop_;
 }

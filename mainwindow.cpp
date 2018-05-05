@@ -9,6 +9,7 @@
 #include "addlinedialog.h"
 #include "filterdialog.h"
 #include "deletedialog.h"
+#include "connectedlinesdialog.h"
 
 #include <iostream>
 
@@ -48,6 +49,9 @@ void MainWindow::createActions()
     deleteAct = new QAction(tr("&Delete line"), this);
     connect(deleteAct, &QAction::triggered, this, &MainWindow::deleteLine);
 
+    showConnectedAct = new QAction(tr("&Show lines connected to line"), this);
+    connect(showConnectedAct, &QAction::triggered, this, &MainWindow::showConnectedLines);
+
 }
 
 void MainWindow::createMenus()
@@ -60,6 +64,9 @@ void MainWindow::createMenus()
     editMenu->addAction(newAct);
     editMenu->addAction(filterAct);
     editMenu->addAction(deleteAct);
+
+    viewMenu = menuBar()->addMenu(tr("&View"));
+    viewMenu->addAction(showConnectedAct);
 }
 
 void MainWindow::open() {
@@ -98,6 +105,12 @@ void MainWindow::deleteLine()
 {
     DeleteDialog* deleteDialog = new DeleteDialog(network_, [this] {drawWindow();});
     deleteDialog->show();
+}
+
+void MainWindow::showConnectedLines()
+{
+    ConnectedLinesDialog* connectedDialog = new ConnectedLinesDialog(network_);
+    connectedDialog->show();
 }
 
 void MainWindow::drawWindow() {
