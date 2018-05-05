@@ -34,6 +34,8 @@ private:
     QAction *showLinesForStopAct;
     QAction *showNextStopsAct;
     QAction *twoStopsAct;
+    QAction *mostMutualAct;
+    QAction *nearestStopAct;
 
     void createActions();
     void createMenus();
@@ -52,6 +54,8 @@ private slots:
     void showLinesForStop();
     void showNextStops();
     void twoStops();
+    void mostMutual();
+    void nearestStop();
 
 };
 

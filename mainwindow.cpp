@@ -14,6 +14,9 @@
 #include "connectedpairsdialog.h"
 #include "lineforstopdialog.h"
 #include "twostopsdialog.h"
+#include "linedialog.h"
+#include "locationwidget.h"
+#include "busstop.h"
 
 #include <iostream>
 
@@ -68,6 +71,12 @@ void MainWindow::createActions()
     twoStopsAct = new QAction(tr("&Two stops in one direction"), this);
     connect(twoStopsAct, &QAction::triggered, this, &MainWindow::twoStops);
 
+    mostMutualAct = new QAction(tr("&Line with most mutual stops"), this);
+    connect(mostMutualAct, &QAction::triggered, this, &MainWindow::mostMutual);
+
+    nearestStopAct = new QAction(tr("&Nearest stop to location"), this);
+    connect(nearestStopAct, &QAction::triggered, this, &MainWindow::nearestStop);
+
 }
 
 void MainWindow::createMenus()
@@ -87,6 +96,8 @@ void MainWindow::createMenus()
     viewMenu->addAction(showLinesForStopAct);
     viewMenu->addAction(showNextStopsAct);
     viewMenu->addAction(twoStopsAct);
+    viewMenu->addAction(mostMutualAct);
+    viewMenu->addAction(nearestStopAct);
 }
 
 void MainWindow::open() {
@@ -186,6 +197,67 @@ void MainWindow::twoStops()
         }
     }
 
+}
+
+void MainWindow::mostMutual()
+{
+    LineDialog* dialog = new LineDialog();
+    dialog->show();
+    if(dialog->exec()) {
+        auto line = network_.getLine(dialog->getLine().toStdString());
+        QMessageBox* message = new QMessageBox();
+        if(line != nullptr) {
+            auto lineName = line->lineWithMostMutualStops()->getName();
+            message->setText("Line with most mutual stops: " + QString::fromStdString(lineName));
+            message->show();
+        }
+        else {
+            message->setText("Invalid line name");
+            message->show();
+        }
+    }
+}
+
+void MainWindow::nearestStop()
+{
+    LocationWidget* location = new LocationWidget();
+    location->show();
+    if(location->exec()) {
+        bool valid;
+        double latitude = location->getLatitude().toDouble(&valid);
+        if(!valid) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid latitude");
+            message->show();
+            return;
+        }
+        double longitude = location->getLongitude().toDouble(&valid);
+        if(!valid) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid longitude");
+            message->show();
+            return;
+        }
+        auto lineName = location->getLine().toStdString();
+        Location location(latitude, longitude);
+        BusStop* stop;
+        if(lineName == "")
+            stop = network_.nearestStopToLocation(location);
+        else {
+            auto line = network_.getLine(lineName);
+            if(line == nullptr) {
+                QMessageBox* message = new QMessageBox();
+                message->setText("Invalid line name");
+                message->show();
+                return;
+            }
+            stop = network_.nearestStopToLocation(location, line);
+        }
+
+        QMessageBox* message = new QMessageBox();
+        message->setText("Nearest stop: " + QString::fromStdString(std::to_string(stop->getStopID_())) + " " + QString::fromStdString(stop->getStopName_()));
+        message->show();
+    }
 }
 
 void MainWindow::drawWindow() {
