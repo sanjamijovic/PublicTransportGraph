@@ -1,5 +1,6 @@
 #include <QFileDialog>
 #include <QPushButton>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -12,6 +13,7 @@
 #include "connectedlinesdialog.h"
 #include "connectedpairsdialog.h"
 #include "lineforstopdialog.h"
+#include "twostopsdialog.h"
 
 #include <iostream>
 
@@ -60,6 +62,12 @@ void MainWindow::createActions()
     showLinesForStopAct = new QAction(tr("&Show lines for stop"), this);
     connect(showLinesForStopAct, &QAction::triggered, this, &MainWindow::showLinesForStop);
 
+    showNextStopsAct = new QAction(tr("&Show all next stops for stop"), this);
+    connect(showNextStopsAct, &QAction::triggered, this, &MainWindow::showNextStops);
+
+    twoStopsAct = new QAction(tr("&Two stops in one direction"), this);
+    connect(twoStopsAct, &QAction::triggered, this, &MainWindow::twoStops);
+
 }
 
 void MainWindow::createMenus()
@@ -77,6 +85,8 @@ void MainWindow::createMenus()
     viewMenu->addAction(showConnectedAct);
     viewMenu->addAction(showConnectedPairsAct);
     viewMenu->addAction(showLinesForStopAct);
+    viewMenu->addAction(showNextStopsAct);
+    viewMenu->addAction(twoStopsAct);
 }
 
 void MainWindow::open() {
@@ -131,8 +141,51 @@ void MainWindow::showConnectedPairs()
 
 void MainWindow::showLinesForStop()
 {
-    LineForStopDialog* lineForStopDialog = new LineForStopDialog(network_);
+    InfoForStopDialog* lineForStopDialog = new InfoForStopDialog(false, network_);
     lineForStopDialog->show();
+}
+
+void MainWindow::showNextStops()
+{
+    InfoForStopDialog* nextStops = new InfoForStopDialog(true, network_);
+    nextStops->show();
+}
+
+void MainWindow::twoStops()
+{
+    TwoStopsDialog* dialog = new TwoStopsDialog();
+    dialog->show();
+    if(dialog->exec()) {
+        auto line = network_.getLine(dialog->getLine().toStdString());
+        if(line == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid line");
+        }
+        else{
+            auto stop1 = network_.getStop(dialog->getFirstStop().toInt());
+            if(line == nullptr) {
+                QMessageBox* message = new QMessageBox();
+                message->setText("Invalid first stop");
+            }
+            else{
+                auto stop2 = network_.getStop(dialog->getSecondStop().toInt());
+                if(line == nullptr) {
+                    QMessageBox* message = new QMessageBox();
+                    message->setText("Invalid second stop");
+                }
+                else {
+
+                    QMessageBox* outmessage = new QMessageBox();
+                    if(line->hasStopsInOneDirection(stop1, stop2))
+                        outmessage->setText("Line has those stops in one direction.");
+                    else
+                        outmessage->setText("Line doesn't have those stops in one direction.");
+                    outmessage->show();
+                }
+            }
+        }
+    }
+
 }
 
 void MainWindow::drawWindow() {

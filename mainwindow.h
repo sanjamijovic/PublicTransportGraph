@@ -32,6 +32,8 @@ private:
     QAction *showConnectedAct;
     QAction *showConnectedPairsAct;
     QAction *showLinesForStopAct;
+    QAction *showNextStopsAct;
+    QAction *twoStopsAct;
 
     void createActions();
     void createMenus();
@@ -48,6 +50,8 @@ private slots:
     void showConnectedLines();
     void showConnectedPairs();
     void showLinesForStop();
+    void showNextStops();
+    void twoStops();
 
 };
 

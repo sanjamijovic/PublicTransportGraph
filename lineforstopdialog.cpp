@@ -6,21 +6,22 @@
 #include <QMessageBox>
 #include <sstream>
 
-LineForStopDialog::LineForStopDialog(Network& network, QWidget *parent) :
+InfoForStopDialog::InfoForStopDialog(bool stops, Network& network, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LineForStopDialog),
-    network_(network)
+    network_(network),
+    stops_(stops)
 {
     ui->setupUi(this);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(acc()));
 }
 
-LineForStopDialog::~LineForStopDialog()
+InfoForStopDialog::~InfoForStopDialog()
 {
     delete ui;
 }
 
-void LineForStopDialog::acc()
+void InfoForStopDialog::acc()
 {
     auto stop = network_.getStop(ui->lineEdit->text().toInt());
     if(stop == nullptr) {
@@ -30,9 +31,16 @@ void LineForStopDialog::acc()
     }
 
     std::stringstream ss;
-    auto result = stop->getLines();
-    for(auto line : result)
-        ss << *line << std::endl;
+    if(stops_) {
+        auto result = network_.allNextStops(stop);
+        for(auto line : result)
+            ss << *line << std::endl;
+    }
+    else {
+        auto result = stop->getLines();
+        for(auto stop : result)
+            ss << *stop << std::endl;
+    }
 
     TextWidget* text  = new TextWidget(QString::fromStdString(ss.str()));
     text->show();

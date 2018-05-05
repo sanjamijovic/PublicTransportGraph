@@ -47,7 +47,8 @@ SOURCES += \
     connectedlinesdialog.cpp \
     textwidget.cpp \
     connectedpairsdialog.cpp \
-    lineforstopdialog.cpp
+    lineforstopdialog.cpp \
+    twostopsdialog.cpp
 
 
 HEADERS += \
@@ -75,7 +76,8 @@ HEADERS += \
     connectedlinesdialog.h \
     textwidget.h \
     connectedpairsdialog.h \
-    lineforstopdialog.h
+    lineforstopdialog.h \
+    twostopsdialog.h
 
 
 FORMS += \
@@ -89,4 +91,5 @@ FORMS += \
     connectedlinesdialog.ui \
     textwidget.ui \
     connectedpairsdialog.ui \
-    lineforstopdialog.ui
+    lineforstopdialog.ui \
+    twostopsdialog.ui

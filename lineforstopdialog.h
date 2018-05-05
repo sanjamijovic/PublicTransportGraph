@@ -9,17 +9,19 @@ namespace Ui {
 class LineForStopDialog;
 }
 
-class LineForStopDialog : public QDialog
+class InfoForStopDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit LineForStopDialog(Network& network, QWidget *parent = 0);
-    ~LineForStopDialog();
+    // stops = false shows lines
+    explicit InfoForStopDialog(bool stops, Network& network, QWidget *parent = 0);
+    ~InfoForStopDialog();
 
 private:
     Ui::LineForStopDialog *ui;
     Network& network_;
+    bool stops_;
 private slots:
     void acc();
 };
