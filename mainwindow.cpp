@@ -14,6 +14,7 @@ MainWindow::MainWindow(Network& network, QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("PublicTransportGraph");
     createActions();
     createMenus();
 }

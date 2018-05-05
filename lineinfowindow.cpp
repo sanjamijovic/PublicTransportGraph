@@ -10,7 +10,10 @@ LineInfoWindow::LineInfoWindow(BusLine* line, QWidget *parent) :
     ui(new Ui::LineInfoWindow)
 {
     ui->setupUi(this);
-    ui->label->setText(QString::fromStdString(line_->getName()));
+    setWindowTitle("Line " + QString::fromStdString(line->getName()));
+    ui->lineName->setText(QString::fromStdString(line_->getName()));
+
+    ui->route->setText(QString::fromStdString(line_->getFirstStop()) + QString::fromUtf8(" \u2192 ") + QString::fromStdString(line->getLastStop()));
 
     auto directionA = new DirectionTabWidget();
     ui->tabWidget->addTab(directionA, "Direction A");

@@ -26,10 +26,20 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QTabWidget" name="tabWidget"/>
+   </item>
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lineName">
+       <property name="font">
+        <font>
+         <pointsize>24</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
         <string>TextLabel</string>
        </property>
@@ -38,7 +48,16 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QTabWidget" name="tabWidget"/>
+    <widget class="QLabel" name="route">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
