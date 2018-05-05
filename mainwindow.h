@@ -36,6 +36,8 @@ private:
     QAction *twoStopsAct;
     QAction *mostMutualAct;
     QAction *nearestStopAct;
+    QAction *shortestPathAct;
+    QAction *smallestStopoversAct;
 
     void createActions();
     void createMenus();
@@ -56,6 +58,8 @@ private slots:
     void twoStops();
     void mostMutual();
     void nearestStop();
+    void shortestPath();
+    void smallestStopovers();
 
 };
 

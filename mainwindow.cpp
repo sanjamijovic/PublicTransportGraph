@@ -17,6 +17,7 @@
 #include "linedialog.h"
 #include "locationwidget.h"
 #include "busstop.h"
+#include "bfsdialog.h"
 
 #include <iostream>
 
@@ -77,6 +78,12 @@ void MainWindow::createActions()
     nearestStopAct = new QAction(tr("&Nearest stop to location"), this);
     connect(nearestStopAct, &QAction::triggered, this, &MainWindow::nearestStop);
 
+    shortestPathAct = new QAction(tr("&Shortest path"), this);
+    connect(shortestPathAct, &QAction::triggered, this, &MainWindow::shortestPath);
+
+    smallestStopoversAct = new QAction(tr("&Least stopovers"), this);
+    connect(smallestStopoversAct, &QAction::triggered, this, &MainWindow::smallestStopovers);
+
 }
 
 void MainWindow::createMenus()
@@ -98,6 +105,8 @@ void MainWindow::createMenus()
     viewMenu->addAction(twoStopsAct);
     viewMenu->addAction(mostMutualAct);
     viewMenu->addAction(nearestStopAct);
+    viewMenu->addAction(shortestPathAct);
+    viewMenu->addAction(smallestStopoversAct);
 }
 
 void MainWindow::open() {
@@ -257,6 +266,52 @@ void MainWindow::nearestStop()
         QMessageBox* message = new QMessageBox();
         message->setText("Nearest stop: " + QString::fromStdString(std::to_string(stop->getStopID_())) + " " + QString::fromStdString(stop->getStopName_()));
         message->show();
+    }
+}
+
+void MainWindow::shortestPath()
+{
+    BfsDialog* dialog = new BfsDialog();
+    dialog->show();
+    if(dialog->exec()) {
+        int stop1 = dialog->getFirstStop().toInt();
+        int stop2 = dialog->getSecondStop().toInt();
+        BusStop *s1, *s2;
+        if((s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid stops");
+            message->show();
+            return;
+        }
+
+        auto result = network_.shortestPath(s1, s2);
+        QMessageBox* message = new QMessageBox();
+        message->setText("Shortest path: " + QString::fromStdString(std::to_string(result)));
+        message->show();
+
+    }
+}
+
+void MainWindow::smallestStopovers()
+{
+    BfsDialog* dialog = new BfsDialog();
+    dialog->show();
+    if(dialog->exec()) {
+        int stop1 = dialog->getFirstStop().toInt();
+        int stop2 = dialog->getSecondStop().toInt();
+        BusStop *s1, *s2;
+        if((s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid stops");
+            message->show();
+            return;
+        }
+
+        auto result = network_.numOfStopovers(s1, s2);
+        QMessageBox* message = new QMessageBox();
+        message->setText("Number of stopovers: " + QString::fromStdString(std::to_string(result)));
+        message->show();
+
     }
 }
 

@@ -50,7 +50,8 @@ SOURCES += \
     lineforstopdialog.cpp \
     twostopsdialog.cpp \
     linedialog.cpp \
-    locationwidget.cpp
+    locationwidget.cpp \
+    bfsdialog.cpp
 
 
 HEADERS += \
@@ -81,7 +82,8 @@ HEADERS += \
     lineforstopdialog.h \
     twostopsdialog.h \
     linedialog.h \
-    locationwidget.h
+    locationwidget.h \
+    bfsdialog.h
 
 
 FORMS += \
@@ -98,4 +100,5 @@ FORMS += \
     lineforstopdialog.ui \
     twostopsdialog.ui \
     linedialog.ui \
-    locationwidget.ui
+    locationwidget.ui \
+    bfsdialog.ui
