@@ -10,13 +10,15 @@
 
 SaveDialog::SaveDialog(Network& network, QWidget *parent) :
     QDialog(parent),
+    ui(new Ui::SaveDialog),
     network_(network),
-    ui(new Ui::SaveDialog)
+    graph(C_MODEL),
+    format(GML)
 {
     ui->setupUi(this);
     ui->graph->addItem("C model");
     ui->graph->addItem("L model");
-    connect(ui->graph,SIGNAL(activated(int)),this,SLOT(graph(int)));
+    connect(ui->graph,SIGNAL(activated(int)),this,SLOT(graphModel(int)));
 
     ui->format->addItem("GML");
     ui->format->addItem("CSV Edges Table");
@@ -25,7 +27,6 @@ SaveDialog::SaveDialog(Network& network, QWidget *parent) :
     connect(ui->graph,SIGNAL(activated(int)),this,SLOT(formatType(int)));
 
     connect(ui->dialogButtonBox, SIGNAL(accepted()), this, SLOT(acc()));
-    connect(ui->dialogButtonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 
 }
@@ -69,13 +70,11 @@ void SaveDialog::formatType(int val)
 
 void SaveDialog::acc()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "/", tr("Graph files (*.gml *.csv)"));
+    std::string form = (format == GML ? "GML files (*.gml)" : "CSV files (*.csv)");
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "/", tr(form.c_str()));
 
-//    QString dir = QFileDialog::getExistingDirectory(0, tr("Open Directory"), "/",
-//                                                 QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
     GraphFormatGenerator* generator;
     OutputFileFormater* formater;
-//    std::string fileName = dir.QString::toStdString() + (graph == L_MODEL ? "l" : "c") + (format == GML ? ".gml" : ".csv");
     if(graph == L_MODEL)
         generator = new LGraphGenerator(network_);
     else
@@ -96,6 +95,8 @@ void SaveDialog::acc()
     }
 
     formater->makeFile();
+    delete generator;
+    delete formater;
 
 }
 

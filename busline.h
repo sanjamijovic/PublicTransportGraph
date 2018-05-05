@@ -23,6 +23,8 @@ public:
     BusLine(const std::string& lineName, const std::string& firstStop, const std::string& lastStop);
 
     void setName(const std::string& lineName);
+    void setFirstStop(const std::string& firstStop);
+    void setLastStop(const std::string& lastStop);
     unsigned long getNumberOfStops(Directions direction) const;
     int getNumberOfStopsInZone(int zoneID);
     unsigned long getNumberOfAllStops() const;
@@ -33,6 +35,7 @@ public:
 
     void addStop(BusStop* stop, Directions direction);
     void removeStop(BusStop* stop, Directions direction);
+    void removeAllStops();
 
     std::set<BusLine *, PtrComparator> linesWithMutualStops();
     BusLine* lineWithMostMutualStops();

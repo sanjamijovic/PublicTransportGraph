@@ -6,13 +6,14 @@
 #include "textparser.h"
 #include "lineinfowindow.h"
 #include "savedialog.h"
+#include "addlinedialog.h"
 
 #include <iostream>
 
 MainWindow::MainWindow(Network& network, QWidget *parent) :
-    network_(network),
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    network_(network)
 {
     ui->setupUi(this);
     setWindowTitle("PublicTransportGraph");
@@ -34,6 +35,10 @@ void MainWindow::createActions()
     saveAct = new QAction(tr("&Save"), this);
     saveAct->setShortcuts(QKeySequence::Save);
     connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+
+    newAct = new QAction(tr("&Add new line"), this);
+    newAct->setShortcuts(QKeySequence::New);
+    connect(newAct, &QAction::triggered, this, &MainWindow::newLine);
 }
 
 void MainWindow::createMenus()
@@ -41,6 +46,9 @@ void MainWindow::createMenus()
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
+
+    editMenu = menuBar()->addMenu(tr("&Edit"));
+    editMenu->addAction(newAct);
 }
 
 void MainWindow::open() {
@@ -63,12 +71,17 @@ void MainWindow::open() {
 
 void MainWindow::handleButton(const std::string& lineName) {
     auto line = network_.getLine(lineName);
-    LineInfoWindow *lineWindow = new LineInfoWindow(line);
+    LineInfoWindow* lineWindow = new LineInfoWindow(line);
     lineWindow->show();
 }
 
 void MainWindow::save() {
-    SaveDialog *dialog = new SaveDialog(network_);
+    SaveDialog* dialog = new SaveDialog(network_);
     dialog->show();
 
+}
+
+void MainWindow::newLine() {
+    AddLineDialog* addDialog = new AddLineDialog(network_);
+    addDialog->show();
 }

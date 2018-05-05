@@ -11,6 +11,11 @@ void LineDirection::remove(BusStop *stop) {
     stops_.erase(std::remove(stops_.begin(), stops_.end(), stop), stops_.end());
 }
 
+void LineDirection::removeAllStops()
+{
+    stops_.clear();
+}
+
 unsigned long LineDirection::getNumberOfStops() const {
     return stops_.size();
 }

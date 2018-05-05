@@ -10,10 +10,10 @@ void TextParser::collectData(const std::string &fileName) {
     std::ifstream file(fileName);
 
     if (file.is_open()) {
-        std::regex reg("([^!]*)!([^!]*)!([^!]*)!\r");
+        std::regex reg("([^!]*)!([^!]*)!([^!]*)!\r?");
         std::string textLine;
 
-        while (getline(file, textLine)) {
+        while (std::getline(file, textLine)) {
             std::smatch result;
             if (regex_match(textLine, result, reg)) {
                 std::string lineName = result.str(1);
@@ -46,10 +46,10 @@ void TextParser::collectStopsData(const std::string &fileName, BusLine *line, Bu
 
     if (file.is_open()) {
 
-        std::regex reg("([^!]*)!([^!]*)!([^!]*)!([^!]*)!([1-4])\r");
+        std::regex reg("([^!]*)!([^!]*)!([^!]*)!([^!]*)!([1-4])\r?");
         std::string textLine;
 
-        while (getline(file, textLine)) {
+        while (std::getline(file, textLine)) {
             std::smatch result;
             if (regex_match(textLine, result, reg)) {
                 int stopID = atoi(result.str(1).c_str());

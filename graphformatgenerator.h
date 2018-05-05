@@ -8,6 +8,7 @@ class Node;
 class GraphFormatGenerator {
 public:
     explicit GraphFormatGenerator(Network& network);
+    virtual ~GraphFormatGenerator() = default;
 
     virtual bool directed() const = 0;
     std::set<Node *> getNodes() const;

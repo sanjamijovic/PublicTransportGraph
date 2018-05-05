@@ -1,6 +1,7 @@
 #include "busline.h"
 #include "linedirection.h"
 #include "busstop.h"
+#include "network.h"
 #include <regex>
 #include <set>
 
@@ -14,6 +15,16 @@ BusLine::BusLine(const std::string &lineName, const std::string &firstStop, cons
 void BusLine::setName(const std::string &lineName) {
     lineName_ = lineName;
     lineNumber_ = getLineNumberFromLineName();
+}
+
+void BusLine::setFirstStop(const std::string &firstStop)
+{
+    firstStop_ = firstStop;
+}
+
+void BusLine::setLastStop(const std::string &lastStop)
+{
+    lastStop_ = lastStop;
 }
 
 unsigned long BusLine::getNumberOfStops(BusLine::Directions direction) const {
@@ -52,18 +63,25 @@ void BusLine::addStop(BusStop *stop, BusLine::Directions direction) {
     (direction == DIRECTION_A ? directionA_ : directionB_).add(stop);
 
     stop->addLine(this);
-
-    numberOfStopsInZone_.insert(
-            std::pair<int, int>(stop->getZoneID_(), getNumberOfStopsInZone(stop->getZoneID_()) + 1));
+    numberOfStopsInZone_[stop->getZoneID_()] = numberOfStopsInZone_[stop->getZoneID_()] + 1;
 }
 
 void BusLine::removeStop(BusStop *stop, BusLine::Directions direction) {
     (direction == DIRECTION_A ? directionA_ : directionB_).remove(stop);
 
     stop->removeLine(this);
+    numberOfStopsInZone_[stop->getZoneID_()] = numberOfStopsInZone_[stop->getZoneID_()] - 1;
+}
 
-    numberOfStopsInZone_.insert(
-            std::pair<int, int>(stop->getZoneID_(), getNumberOfStopsInZone(stop->getZoneID_()) - 1));
+void BusLine::removeAllStops()
+{
+    for(auto stop : getAllStops())
+        stop->removeLine(this);
+
+    directionA_.removeAllStops();
+    directionB_.removeAllStops();
+    for(int i = 0; i < Network::LAST_ZONE; i++)
+        numberOfStopsInZone_[i] = 0;
 }
 
 std::set<BusLine *, PtrComparator> BusLine::linesWithMutualStops() {

@@ -13,6 +13,7 @@ class LineDirection {
 public:
     void add(BusStop* stop);
     void remove(BusStop* stop);
+    void removeAllStops();
 
     unsigned long getNumberOfStops() const;
     std::vector<BusStop*> getStops();

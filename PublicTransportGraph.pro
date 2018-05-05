@@ -40,7 +40,8 @@ SOURCES += \
         csvoutput.cpp \
         lineinfowindow.cpp \
     directiontabwidget.cpp \
-    savedialog.cpp
+    savedialog.cpp \
+    addlinedialog.cpp
 
 
 HEADERS += \
@@ -61,11 +62,13 @@ HEADERS += \
         node.h \
         lineinfowindow.h \
     directiontabwidget.h \
-    savedialog.h
+    savedialog.h \
+    addlinedialog.h
 
 
 FORMS += \
         mainwindow.ui \
     lineinfowindow.ui \
     directiontabwidget.ui \
-    savedialog.ui
+    savedialog.ui \
+    addlinedialog.ui
