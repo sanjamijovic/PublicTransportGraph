@@ -58,6 +58,7 @@ void TextParser::collectData(const std::string &fileName, bool& valid) {
     }
 
     file.close();
+    valid = true;
     if (errorMessages != "")
         throw InvalidFile(errorMessages);
 
