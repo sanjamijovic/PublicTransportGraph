@@ -37,6 +37,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    if(!exported) {
+
+        QMessageBox::StandardButton reply;
+          reply = QMessageBox::question(this, "End", "Do you want to save your work?",QMessageBox::Yes|QMessageBox::No);
+          if (reply == QMessageBox::Yes) {
+              save();
+              while(!exported);
+              QApplication::quit();
+          } else {
+            QApplication::quit();
+          }
+    }
+}
+
 void MainWindow::createActions()
 {
     openAct = new QAction(tr("&Open"), this);
@@ -110,11 +126,21 @@ void MainWindow::createMenus()
 }
 
 void MainWindow::open() {
+    if(!exported) {
+        QMessageBox::StandardButton reply;
+          reply = QMessageBox::question(this, "Save old work", "Do you want to save your work?",QMessageBox::Yes|QMessageBox::No);
+          if (reply == QMessageBox::Yes) {
+              save();
+          }
+    }
+    network_.clear();
+
     QString fileName = QFileDialog::getOpenFileName(this,
              tr("Open network file"), "/", tr("Text Files (*.txt)"));
     TextParser parser(network_);
     parser.collectData(fileName.toUtf8().constData());
     drawWindow();
+    exported = false;
 
 }
 
@@ -126,25 +152,32 @@ void MainWindow::handleButton(const std::string& lineName) {
 
 void MainWindow::save() {
     SaveDialog* dialog = new SaveDialog(network_);
-    dialog->show();
+    if(dialog->exec())
+        exported = true;
 
 }
 
 void MainWindow::newLine() {
-    AddLineDialog* addDialog = new AddLineDialog(network_, [this] { drawWindow(); });
-    addDialog->show();
+    bool valid;
+    AddLineDialog* addDialog = new AddLineDialog(network_, [this] { drawWindow(); }, &valid);
+    if(addDialog->exec())
+        exported = !valid;
 }
 
 void MainWindow::filter()
 {
-    FilterDialog* filterDialog = new FilterDialog(network_, [this] {drawWindow();});
-    filterDialog->show();
+    bool valid;
+    FilterDialog* filterDialog = new FilterDialog(network_, [this] {drawWindow();}, &valid);
+    if(filterDialog->exec())
+        exported = !valid;
 }
 
 void MainWindow::deleteLine()
 {
-    DeleteDialog* deleteDialog = new DeleteDialog(network_, [this] {drawWindow();});
-    deleteDialog->show();
+    bool valid;
+    DeleteDialog* deleteDialog = new DeleteDialog(network_, [this] {drawWindow();}, &valid);
+    if(deleteDialog->exec())
+        exported = !valid;
 }
 
 void MainWindow::showConnectedLines()

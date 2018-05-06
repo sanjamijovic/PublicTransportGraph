@@ -1,12 +1,14 @@
 #include "filterdialog.h"
 #include "ui_filterdialog.h"
 #include "network.h"
+#include <QMessageBox>
 
-FilterDialog::FilterDialog(Network& network, std::function<void(void)> draw, QWidget *parent) :
+FilterDialog::FilterDialog(Network& network, std::function<void(void)> draw, bool* valid, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FilterDialog),
     network_(network),
-    draw_(draw)
+    draw_(draw),
+    valid_(valid)
 {
     ui->setupUi(this);
     ui->lineEdit->setVisible(false);
@@ -35,7 +37,15 @@ void FilterDialog::acc()
     switch(typeOfFilter) {
     case ZONE:
         std::cout << ui->number->text().toInt();
-        network_.filterByZone(ui->number->text().toInt());
+        try {
+            network_.filterByZone(ui->number->text().toInt());
+    }catch(std::invalid_argument exc) {
+            QMessageBox* message = new QMessageBox();
+            message->setText(QString::fromStdString(exc.what()));
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     case LINE_NUMBER_G:
         network_.filterByLineNumberGreater(ui->number->text().toInt());
@@ -53,8 +63,8 @@ void FilterDialog::acc()
         network_.filterByNumberOfStopsSmaller(ui->number->text().toInt());
         break;
     }
-    std::cout << network_;
     draw_();
+    *valid_ = true;
 }
 
 void FilterDialog::filterType(int val)
@@ -63,7 +73,7 @@ void FilterDialog::filterType(int val)
     case 0:
         ui->lineEdit->setVisible(false);
         ui->label->setVisible(false);
-        ui->filterLabel->setText("Number of last zone:");
+        ui->filterLabel->setText("Number of last zone: (1-3)");
         typeOfFilter = ZONE;
         break;
     case 1:

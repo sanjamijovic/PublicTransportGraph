@@ -4,11 +4,7 @@
 #include "busstop.h"
 
 Network::~Network() {
-    for (auto l : busLines_)
-        delete l;
-
-    for (auto s : allBusStops_)
-        delete s.second;
+    clear();
 }
 
 void Network::addLine(BusLine *line) {
@@ -52,7 +48,7 @@ std::vector<std::string>  Network::getAllLineNames() const {
 
 // leaves lines which have only stops in zones with smaller id than numOfZones
 void Network::filterByZone(unsigned long numOfZones) {
-    if (numOfZones <= 0 || numOfZones > LAST_ZONE)
+    if (numOfZones <= 0 || numOfZones >= LAST_ZONE)
         throw std::invalid_argument("Number of zone isn't valid.");
 
     filterIf([numOfZones](std::set<BusLine *>::iterator iter) {
@@ -205,6 +201,17 @@ unsigned long Network::numOfStopovers(BusStop * first, BusStop * last) {
     }
 
     return ULONG_MAX;
+}
+
+void Network::clear()
+{
+    for (auto l : busLines_)
+        delete l;
+
+    for (auto s : allBusStops_)
+        delete s.second;
+    busLines_.clear();
+    allBusStops_.clear();
 }
 
 std::ostream &operator<<(std::ostream &os, const Network &n) {

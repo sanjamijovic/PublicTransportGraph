@@ -43,6 +43,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Network& n);
 
+    void clear();
+
 private:
     std::set<BusLine *, PtrComparator> busLines_;
     std::map<int, BusStop*> allBusStops_;

@@ -8,11 +8,12 @@
 #include <QAction>
 #include <QMessageBox>
 
-AddLineDialog::AddLineDialog(Network& network, std::function<void(void)> draw, QWidget *parent) :
+AddLineDialog::AddLineDialog(Network& network, std::function<void(void)> draw, bool* valid, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddLineDialog),
     network_(network),
-    draw_(draw)
+    draw_(draw),
+    valid_(valid)
 {
     ui->setupUi(this);
     connect(ui->dirAButton, SIGNAL(clicked(bool)), this, SLOT(dirA()));
@@ -42,11 +43,13 @@ void AddLineDialog::acc()
         parser.collectStopsData(fileNameDirectionA.toStdString(), line, BusLine::DIRECTION_A);
         parser.collectStopsData(fileNameDirectionB.toStdString(), line, BusLine::DIRECTION_B);
         draw_();
+        *valid_ = true;
     }
     else {
         QMessageBox* message = new QMessageBox();
         message->setText("Files not specified");
         message->show();
+        *valid_ = false;
     }
 }
 

@@ -16,7 +16,7 @@ class AddLineDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddLineDialog(Network& network, std::function<void(void)> draw, QWidget* parent = 0);
+    explicit AddLineDialog(Network& network, std::function<void(void)> draw, bool* valid, QWidget* parent = 0);
     ~AddLineDialog();
 
 private:
@@ -25,6 +25,7 @@ private:
     QString fileNameDirectionA = "";
     QString fileNameDirectionB = "";
     std::function<void(void)> draw_;
+    bool* valid_;
 
 private slots:
     void acc();

@@ -17,9 +17,12 @@ public:
     MainWindow(Network& network, QWidget *parent = 0);
     ~MainWindow();
 
+    void closeEvent(QCloseEvent*) override;
+
 private:
     Ui::MainWindow *ui;
     Network& network_;
+    bool exported = true;
 
     QMenu *fileMenu;
     QMenu *editMenu;
