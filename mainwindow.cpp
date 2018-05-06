@@ -138,7 +138,13 @@ void MainWindow::open() {
     QString fileName = QFileDialog::getOpenFileName(this,
              tr("Open network file"), "/", tr("Text Files (*.txt)"));
     TextParser parser(network_);
-    parser.collectData(fileName.toUtf8().constData());
+    try {
+        parser.collectData(fileName.toUtf8().constData());
+    } catch(std::exception& e) {
+        QMessageBox* message = new QMessageBox();
+        message->setText(QString::fromStdString(e.what()));
+        message->show();
+    }
     drawWindow();
     exported = false;
 

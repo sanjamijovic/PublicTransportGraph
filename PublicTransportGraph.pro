@@ -51,7 +51,8 @@ SOURCES += \
     twostopsdialog.cpp \
     linedialog.cpp \
     locationwidget.cpp \
-    bfsdialog.cpp
+    bfsdialog.cpp \
+    invalidfile.cpp
 
 
 HEADERS += \
@@ -83,7 +84,8 @@ HEADERS += \
     twostopsdialog.h \
     linedialog.h \
     locationwidget.h \
-    bfsdialog.h
+    bfsdialog.h \
+    invalidfile.h
 
 
 FORMS += \

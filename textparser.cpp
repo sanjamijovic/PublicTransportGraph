@@ -3,13 +3,22 @@
 #include "network.h"
 #include "busstop.h"
 #include "location.h"
+#include "invalidfile.h"
 
 TextParser::TextParser(Network &network) : network_(network) {}
 
 void TextParser::collectData(const std::string &fileName) {
     std::ifstream file(fileName);
 
+    std::string errorMessages;
+
     if (file.is_open()) {
+        // empty file
+        if (file.peek() == std::ifstream::traits_type::eof()) {
+            file.close();
+            throw InvalidFile("File " + fileName + " empty");
+        }
+
         std::regex reg("([^!]*)!([^!]*)!([^!]*)!\r?");
         std::string textLine;
 
@@ -27,17 +36,29 @@ void TextParser::collectData(const std::string &fileName) {
                 std::string lineFileName = fileName.substr(0, pos + 1) + lineName + "_dir";
 
                 // collecting stops for direction A and B
-                collectStopsData(lineFileName + "A.txt", newLine, BusLine::Directions::DIRECTION_A);
-                collectStopsData(lineFileName + "B.txt", newLine, BusLine::Directions::DIRECTION_B);
+                try {
+                    collectStopsData(lineFileName + "A.txt", newLine, BusLine::Directions::DIRECTION_A);
+                    collectStopsData(lineFileName + "B.txt", newLine, BusLine::Directions::DIRECTION_B);
+                } catch(std::exception& e) {
+                    errorMessages += e.what();
+                    errorMessages += '\n';
+                }
 
             } else {
-                std::cout << "File line not matched." << std::endl;
+                network_.clear();
+                file.close();
+                throw InvalidFile("Invalid format in file " + fileName);
             }
         }
 
     } else {
-        std::cout << "File " << fileName << " not found." << std::endl;
+        file.close();
+        throw InvalidFile("File " + fileName + " not found");
     }
+
+    file.close();
+    if (errorMessages != "")
+        throw InvalidFile(errorMessages);
 
 }
 
@@ -46,10 +67,18 @@ void TextParser::collectStopsData(const std::string &fileName, BusLine *line, Bu
 
     if (file.is_open()) {
 
+        // empty file
+        if (file.peek() == std::ifstream::traits_type::eof()) {
+            file.close();
+            network_.removeLine(line);
+            throw InvalidFile("File " + fileName + " empty");
+        }
+
         std::regex reg("([^!]*)!([^!]*)!([^!]*)!([^!]*)!([1-4])\r?");
         std::string textLine;
 
         while (std::getline(file, textLine)) {
+
             std::smatch result;
             if (regex_match(textLine, result, reg)) {
                 int stopID = atoi(result.str(1).c_str());
@@ -72,13 +101,19 @@ void TextParser::collectStopsData(const std::string &fileName, BusLine *line, Bu
                 network_.addStop(stopID, newStop);
 
             } else {
-                std::cout << "File line not matched." << std::endl;
+                network_.removeLine(line);
+                file.close();
+                throw InvalidFile("Invalid format in file " + fileName);
             }
         }
 
     } else {
-        std::cout << "File " << fileName << " not found." << std::endl;
+        file.close();
+        network_.removeLine(line);
+        throw InvalidFile("File " + fileName + " not found");
     }
+
+    file.close();
 
 }
 
