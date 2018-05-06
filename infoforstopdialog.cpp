@@ -1,4 +1,4 @@
-#include "lineforstopdialog.h"
+#include "infoforstopdialog.h"
 #include "ui_lineforstopdialog.h"
 #include "network.h"
 #include "busstop.h"
@@ -23,11 +23,13 @@ InfoForStopDialog::~InfoForStopDialog()
 
 void InfoForStopDialog::acc()
 {
-    auto stop = network_.getStop(ui->lineEdit->text().toInt());
-    if(stop == nullptr) {
+    bool valid;
+    auto stop = network_.getStop(ui->lineEdit->text().toInt(&valid));
+    if(!valid || stop == nullptr) {
         QMessageBox* message = new QMessageBox();
         message->setText("Invalid stop");
         message->show();
+        return;
     }
 
     std::stringstream ss;

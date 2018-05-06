@@ -1,6 +1,8 @@
 #include <QFileDialog>
 #include <QPushButton>
 #include <QMessageBox>
+#include <string>
+#include <climits>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -12,12 +14,14 @@
 #include "deletedialog.h"
 #include "connectedlinesdialog.h"
 #include "connectedpairsdialog.h"
-#include "lineforstopdialog.h"
+#include "infoforstopdialog.h"
 #include "twostopsdialog.h"
 #include "linedialog.h"
 #include "locationwidget.h"
 #include "busstop.h"
 #include "bfsdialog.h"
+#include "changelinename.h"
+#include "linechangestop.h"
 
 #include <iostream>
 
@@ -73,6 +77,12 @@ void MainWindow::createActions()
     deleteAct = new QAction(tr("&Delete line"), this);
     connect(deleteAct, &QAction::triggered, this, &MainWindow::deleteLine);
 
+    changeLineNameAct = new QAction(tr("&Change line name"), this);
+    connect(changeLineNameAct, &QAction::triggered, this, &MainWindow::changeLineName);
+
+    changeLineStopAct = new QAction(tr("&Add or remove stop from line"), this);
+    connect(changeLineStopAct, &QAction::triggered, this, &MainWindow::changeLineStop);
+
     showConnectedAct = new QAction(tr("&Show lines connected to line"), this);
     connect(showConnectedAct, &QAction::triggered, this, &MainWindow::showConnectedLines);
 
@@ -112,6 +122,8 @@ void MainWindow::createMenus()
     editMenu->addAction(newAct);
     editMenu->addAction(filterAct);
     editMenu->addAction(deleteAct);
+    editMenu->addAction(changeLineNameAct);
+    editMenu->addAction(changeLineStopAct);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewMenu->addAction(showConnectedAct);
@@ -138,15 +150,20 @@ void MainWindow::open() {
     QString fileName = QFileDialog::getOpenFileName(this,
              tr("Open network file"), "/", tr("Text Files (*.txt)"));
     TextParser parser(network_);
+
+    bool valid;
     try {
-        parser.collectData(fileName.toUtf8().constData());
+        parser.collectData(fileName.toUtf8().constData(), valid);
     } catch(std::exception& e) {
         QMessageBox* message = new QMessageBox();
-        message->setText(QString::fromStdString(e.what()));
+        std::string errors = e.what();
+        if(errors.size() > 700)
+            errors = errors.substr(0, 700) + "...";
+        message->setText(QString::fromStdString(errors));
         message->show();
     }
     drawWindow();
-    exported = false;
+    exported = !valid;
 
 }
 
@@ -186,6 +203,80 @@ void MainWindow::deleteLine()
         exported = !valid;
 }
 
+void MainWindow::changeLineName()
+{
+    ChangeLineName* dialog = new ChangeLineName();
+    if(dialog->exec()) {
+        auto line = network_.getLine(dialog->oldName().toStdString());
+        if(line == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid old line name");
+            message->show();
+            return;
+        }
+        if(network_.getLine(dialog->newName().toStdString())) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("New name is already used in the network");
+            message->show();
+            return;
+        }
+        network_.changeLineName(line, dialog->newName().toStdString());
+        exported = false;
+        drawWindow();
+    }
+}
+
+void MainWindow::changeLineStop()
+{
+    LineChangeStop* dialog = new LineChangeStop();
+    if(dialog->exec()) {
+        auto line = network_.getLine(dialog->getline().toStdString());
+        if(line == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Nonexistent line in network");
+            message->show();
+            return;
+        }
+
+        BusLine::Directions direction;
+        direction = (dialog->getDirection() == "Direction A") ? BusLine::DIRECTION_A : BusLine::DIRECTION_B;
+
+        if(dialog->getAction() == "Add stop") {
+            bool validLatitude, validLongitude, validStopId, validZoneId;
+            double latitude = dialog->getLatitude().toDouble(&validLatitude);
+            double longitude = dialog->getLongitude().toDouble(&validLongitude);
+            int stopId = dialog->getStop().toInt(&validStopId);
+            int zoneId = dialog->getZone().toInt(&validZoneId);
+            std::string stopName = dialog->getStopName().toStdString();
+
+            if(!validLatitude || !validLongitude || !validStopId || !validZoneId) {
+                QMessageBox* message = new QMessageBox();
+                message->setText("Invalid stop data");
+                message->show();
+                return;
+            }
+
+            Location location(latitude, longitude);
+            auto stop = new BusStop(stopId, stopName, location, zoneId);
+            line->addStop(stop, direction);
+            exported = true;
+        }
+        else {
+            bool valid;
+            auto stop = network_.getStop(dialog->getStop().toInt(&valid));
+
+            if(!valid || stop == nullptr || !stop->isStopForLine(line)) {
+                QMessageBox* message = new QMessageBox();
+                message->setText("Nonexistent stop in the line");
+                message->show();
+                return;
+            }
+            line->removeStop(stop, direction);
+            exported = false;
+        }
+    }
+}
+
 void MainWindow::showConnectedLines()
 {
     ConnectedLinesDialog* connectedDialog = new ConnectedLinesDialog(network_);
@@ -212,6 +303,7 @@ void MainWindow::showNextStops()
 
 void MainWindow::twoStops()
 {
+    bool valid;
     TwoStopsDialog* dialog = new TwoStopsDialog();
     dialog->show();
     if(dialog->exec()) {
@@ -219,30 +311,31 @@ void MainWindow::twoStops()
         if(line == nullptr) {
             QMessageBox* message = new QMessageBox();
             message->setText("Invalid line");
+            message->show();
+            return;
         }
-        else{
-            auto stop1 = network_.getStop(dialog->getFirstStop().toInt());
-            if(line == nullptr) {
-                QMessageBox* message = new QMessageBox();
-                message->setText("Invalid first stop");
-            }
-            else{
-                auto stop2 = network_.getStop(dialog->getSecondStop().toInt());
-                if(line == nullptr) {
-                    QMessageBox* message = new QMessageBox();
-                    message->setText("Invalid second stop");
-                }
-                else {
+        auto stop1 = network_.getStop(dialog->getFirstStop().toInt(&valid));
+        if(!valid || stop1 == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid first stop");
+            message->show();
+            return;
+        }
+        auto stop2 = network_.getStop(dialog->getSecondStop().toInt(&valid));
+        if(!valid || stop2 == nullptr) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid second stop");
+            message->show();
+            return;
+        }
 
-                    QMessageBox* outmessage = new QMessageBox();
-                    if(line->hasStopsInOneDirection(stop1, stop2))
-                        outmessage->setText("Line has those stops in one direction.");
-                    else
-                        outmessage->setText("Line doesn't have those stops in one direction.");
-                    outmessage->show();
-                }
-            }
-        }
+        QMessageBox* outmessage = new QMessageBox();
+        if(line->hasStopsInOneDirection(stop1, stop2))
+            outmessage->setText("Line has those stops in one direction.");
+        else
+            outmessage->setText("Line doesn't have those stops in one direction.");
+        outmessage->show();
+
     }
 
 }
@@ -313,10 +406,11 @@ void MainWindow::shortestPath()
     BfsDialog* dialog = new BfsDialog();
     dialog->show();
     if(dialog->exec()) {
-        int stop1 = dialog->getFirstStop().toInt();
-        int stop2 = dialog->getSecondStop().toInt();
+        bool valid1, valid2;
+        int stop1 = dialog->getFirstStop().toInt(&valid1);
+        int stop2 = dialog->getSecondStop().toInt(&valid2);
         BusStop *s1, *s2;
-        if((s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
+        if(!valid1 || !valid2 || (s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
             QMessageBox* message = new QMessageBox();
             message->setText("Invalid stops");
             message->show();
@@ -325,7 +419,10 @@ void MainWindow::shortestPath()
 
         auto result = network_.shortestPath(s1, s2);
         QMessageBox* message = new QMessageBox();
-        message->setText("Shortest path: " + QString::fromStdString(std::to_string(result)));
+        if(result == ULONG_MAX)
+            message->setText("Stps are unreachable");
+        else
+            message->setText("Shortest path: " + QString::fromStdString(std::to_string(result)));
         message->show();
 
     }
@@ -336,10 +433,11 @@ void MainWindow::smallestStopovers()
     BfsDialog* dialog = new BfsDialog();
     dialog->show();
     if(dialog->exec()) {
-        int stop1 = dialog->getFirstStop().toInt();
-        int stop2 = dialog->getSecondStop().toInt();
+        bool valid1, valid2;
+        int stop1 = dialog->getFirstStop().toInt(&valid1);
+        int stop2 = dialog->getSecondStop().toInt(&valid2);
         BusStop *s1, *s2;
-        if((s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
+        if(!valid1 || !valid2 || (s1 = network_.getStop(stop1)) == nullptr || (s2 = network_.getStop(stop2)) == nullptr) {
             QMessageBox* message = new QMessageBox();
             message->setText("Invalid stops");
             message->show();
@@ -348,7 +446,10 @@ void MainWindow::smallestStopovers()
 
         auto result = network_.numOfStopovers(s1, s2);
         QMessageBox* message = new QMessageBox();
-        message->setText("Number of stopovers: " + QString::fromStdString(std::to_string(result)));
+        if(result == ULONG_MAX)
+            message->setText("Stps are unreachable");
+        else
+            message->setText("Number of stopovers: " + QString::fromStdString(std::to_string(result)));
         message->show();
 
     }

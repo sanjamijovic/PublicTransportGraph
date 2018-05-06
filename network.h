@@ -22,6 +22,7 @@ public:
 
     void addLine(BusLine*);
     void removeLine(BusLine*);
+    void changeLineName(BusLine*, const std::string&);
     void addStop(int stopID, BusStop* stop);
 
     BusLine* getLine(const std::string& lineName);

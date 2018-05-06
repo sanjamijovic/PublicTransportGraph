@@ -13,7 +13,7 @@ class TextParser {
 public:
     explicit TextParser(Network& network);
 
-    void collectData(const std::string& fileName);
+    void collectData(const std::string& fileName, bool& valid);
     void collectStopsData(const std::string& fileName, BusLine* line, BusLine::Directions direction);
 
 private:

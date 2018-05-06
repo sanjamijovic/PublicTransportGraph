@@ -19,6 +19,13 @@ void Network::removeLine(BusLine *line)
     delete line;
 }
 
+void Network::changeLineName(BusLine* line, const std::string & name)
+{
+    busLines_.erase(line);
+    line->setName(name);
+    busLines_.insert(line);
+}
+
 void Network::addStop(int stopID, BusStop *stop) {
     allBusStops_.insert(std::pair<int, BusStop *>(stopID, stop));
 }

@@ -7,7 +7,7 @@
 
 TextParser::TextParser(Network &network) : network_(network) {}
 
-void TextParser::collectData(const std::string &fileName) {
+void TextParser::collectData(const std::string &fileName, bool& valid) {
     std::ifstream file(fileName);
 
     std::string errorMessages;
@@ -16,6 +16,7 @@ void TextParser::collectData(const std::string &fileName) {
         // empty file
         if (file.peek() == std::ifstream::traits_type::eof()) {
             file.close();
+            valid = false;
             throw InvalidFile("File " + fileName + " empty");
         }
 
@@ -39,7 +40,7 @@ void TextParser::collectData(const std::string &fileName) {
                 try {
                     collectStopsData(lineFileName + "A.txt", newLine, BusLine::Directions::DIRECTION_A);
                     collectStopsData(lineFileName + "B.txt", newLine, BusLine::Directions::DIRECTION_B);
-                } catch(std::exception& e) {
+                } catch(InvalidFile& e) {
                     errorMessages += e.what();
                     errorMessages += '\n';
                 }
@@ -47,12 +48,12 @@ void TextParser::collectData(const std::string &fileName) {
             } else {
                 network_.clear();
                 file.close();
+                valid = false;
                 throw InvalidFile("Invalid format in file " + fileName);
             }
         }
 
     } else {
-        file.close();
         throw InvalidFile("File " + fileName + " not found");
     }
 
@@ -108,7 +109,6 @@ void TextParser::collectStopsData(const std::string &fileName, BusLine *line, Bu
         }
 
     } else {
-        file.close();
         network_.removeLine(line);
         throw InvalidFile("File " + fileName + " not found");
     }

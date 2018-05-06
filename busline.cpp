@@ -68,8 +68,9 @@ void BusLine::addStop(BusStop *stop, BusLine::Directions direction) {
 
 void BusLine::removeStop(BusStop *stop, BusLine::Directions direction) {
     (direction == DIRECTION_A ? directionA_ : directionB_).remove(stop);
-
-    stop->removeLine(this);
+    auto otherDirection = (direction == DIRECTION_A ? directionB_ : directionA_);
+    if(!otherDirection.hasStop(stop))
+        stop->removeLine(this);
     numberOfStopsInZone_[stop->getZoneID_()] = numberOfStopsInZone_[stop->getZoneID_()] - 1;
 }
 

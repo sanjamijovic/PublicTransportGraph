@@ -32,6 +32,8 @@ private:
     QAction *newAct;
     QAction *filterAct;
     QAction *deleteAct;
+    QAction *changeLineNameAct;
+    QAction *changeLineStopAct;
     QAction *showConnectedAct;
     QAction *showConnectedPairsAct;
     QAction *showLinesForStopAct;
@@ -53,6 +55,8 @@ private slots:
     void newLine();
     void filter();
     void deleteLine();
+    void changeLineName();
+    void changeLineStop();
 
     void showConnectedLines();
     void showConnectedPairs();
@@ -63,6 +67,7 @@ private slots:
     void nearestStop();
     void shortestPath();
     void smallestStopovers();
+
 
 };
 

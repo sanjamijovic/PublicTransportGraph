@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SaveDialog</class>
- <widget class="QDialog" name="SaveDialog">
+ <class>ChangeLineName</class>
+ <widget class="QDialog" name="ChangeLineName">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,9 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Save</string>
+   <string>Change line</string>
   </property>
-  <widget class="QDialogButtonBox" name="dialogButtonBox">
+  <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -29,62 +29,59 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QComboBox" name="graph">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>50</y>
-     <width>104</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="currentText">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="format">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>110</y>
-     <width>104</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>60</x>
      <y>30</y>
-     <width>141</width>
+     <width>101</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Choose graph model :</string>
+    <string>Old line name:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>60</x>
      <y>90</y>
-     <width>151</width>
+     <width>101</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Choose output format :</string>
+    <string>New line name:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="oldLine">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>50</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="newLine">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>110</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
    </property>
   </widget>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>dialogButtonBox</sender>
+   <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>SaveDialog</receiver>
+   <receiver>ChangeLineName</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -98,9 +95,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>dialogButtonBox</sender>
+   <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>SaveDialog</receiver>
+   <receiver>ChangeLineName</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

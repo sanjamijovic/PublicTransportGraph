@@ -34,12 +34,21 @@ FilterDialog::~FilterDialog()
 
 void FilterDialog::acc()
 {
+    bool valid1;
+    bool valid2;
     switch(typeOfFilter) {
     case ZONE:
         std::cout << ui->number->text().toInt();
         try {
-            network_.filterByZone(ui->number->text().toInt());
-    }catch(std::invalid_argument exc) {
+            network_.filterByZone(ui->number->text().toInt(&valid1));
+            if(!valid1) {
+                QMessageBox* message = new QMessageBox();
+                message->setText("Invalid zone (not a number)");
+                message->show();
+                *valid_ = false;
+                return;
+            }
+        }catch(std::invalid_argument exc) {
             QMessageBox* message = new QMessageBox();
             message->setText(QString::fromStdString(exc.what()));
             message->show();
@@ -48,19 +57,54 @@ void FilterDialog::acc()
         }
         break;
     case LINE_NUMBER_G:
-        network_.filterByLineNumberGreater(ui->number->text().toInt());
+        network_.filterByLineNumberGreater(ui->number->text().toInt(&valid1));
+        if(!valid1) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid line number (not a number)");
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     case LINE_NUMBER_S:
-        network_.filterByLineNumberSmaller(ui->number->text().toInt());
+        network_.filterByLineNumberSmaller(ui->number->text().toInt(&valid1));
+        if(!valid1) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid line number (not a number)");
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     case LINE_NUMBER_B:
-        network_.filterByLineNumberRange(ui->number->text().toInt(), ui->lineEdit->text().toInt());
+        network_.filterByLineNumberRange(ui->number->text().toInt(&valid1), ui->lineEdit->text().toInt(&valid2));
+        if(!valid1 || !valid2) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid line number (not a number)");
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     case STOPS_NUMBER_G:
-        network_.filterByNumberOfStopsGreater(ui->number->text().toInt());
+        network_.filterByNumberOfStopsGreater(ui->number->text().toInt(&valid1));
+        if(!valid1) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid stop ID (not a number)");
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     case STOPS_NUMBER_S:
-        network_.filterByNumberOfStopsSmaller(ui->number->text().toInt());
+        network_.filterByNumberOfStopsSmaller(ui->number->text().toInt(&valid1));
+        if(!valid1) {
+            QMessageBox* message = new QMessageBox();
+            message->setText("Invalid stop ID (not a number)");
+            message->show();
+            *valid_ = false;
+            return;
+        }
         break;
     }
     draw_();

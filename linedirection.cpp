@@ -30,6 +30,11 @@ bool LineDirection::hasStops(BusStop *firstStop, BusStop *secondStop) const {
     return !(firstResult == stops_.end() || secondResult == stops_.end());
 }
 
+bool LineDirection::hasStop(BusStop *stop) const
+{
+    return std::find(stops_.begin(), stops_.end(), stop) != stops_.end();
+}
+
 BusStop *LineDirection::nextStop(BusStop *stop) {
     auto iter = std::find(stops_.begin(), stops_.end(), stop);
     return iter != stops_.end() ? (std::next(iter) != stops_.end() ? *std::next(iter) : nullptr) : nullptr;

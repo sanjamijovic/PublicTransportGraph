@@ -47,12 +47,14 @@ SOURCES += \
     connectedlinesdialog.cpp \
     textwidget.cpp \
     connectedpairsdialog.cpp \
-    lineforstopdialog.cpp \
     twostopsdialog.cpp \
     linedialog.cpp \
     locationwidget.cpp \
     bfsdialog.cpp \
-    invalidfile.cpp
+    invalidfile.cpp \
+    changelinename.cpp \
+    linechangestop.cpp \
+    infoforstopdialog.cpp
 
 
 HEADERS += \
@@ -80,12 +82,14 @@ HEADERS += \
     connectedlinesdialog.h \
     textwidget.h \
     connectedpairsdialog.h \
-    lineforstopdialog.h \
     twostopsdialog.h \
     linedialog.h \
     locationwidget.h \
     bfsdialog.h \
-    invalidfile.h
+    invalidfile.h \
+    changelinename.h \
+    linechangestop.h \
+    infoforstopdialog.h
 
 
 FORMS += \
@@ -99,8 +103,10 @@ FORMS += \
     connectedlinesdialog.ui \
     textwidget.ui \
     connectedpairsdialog.ui \
-    lineforstopdialog.ui \
     twostopsdialog.ui \
     linedialog.ui \
     locationwidget.ui \
-    bfsdialog.ui
+    bfsdialog.ui \
+    changelinename.ui \
+    linechangestop.ui \
+    infoforstopdialog.ui
