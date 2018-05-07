@@ -24,7 +24,7 @@ SaveDialog::SaveDialog(Network& network, QWidget *parent) :
     ui->format->addItem("CSV Edges Table");
     ui->format->addItem("CSV Adjacency List");
     ui->format->addItem("CSV Matrix");
-    connect(ui->graph,SIGNAL(activated(int)),this,SLOT(formatType(int)));
+    connect(ui->format,SIGNAL(activated(int)),this,SLOT(formatType(int)));
 
     connect(ui->dialogButtonBox, SIGNAL(accepted()), this, SLOT(acc()));
 
@@ -70,7 +70,7 @@ void SaveDialog::formatType(int val)
 
 void SaveDialog::acc()
 {
-    std::string form = (format == GML ? "GML files (*.gml)" : "CSV files (*.csv)");
+    std::string form = (format == GML) ? "GML files (*.gml)" : "CSV files (*.csv)";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "/", tr(form.c_str()));
 
     GraphFormatGenerator* generator;

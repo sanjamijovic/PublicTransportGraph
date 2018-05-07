@@ -99,7 +99,7 @@ void Network::filterIf(std::function<bool(std::set<BusLine *>::iterator)> condit
         if (condition(iter))
             iter++;
         else
-            busLines_.erase(iter++);
+            removeLine(*(iter++));
     }
 }
 
