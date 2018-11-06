@@ -4,11 +4,10 @@
 #include <QDialog>
 
 namespace Ui {
-class BfsDialog;
+    class BfsDialog;
 }
 
-class BfsDialog : public QDialog
-{
+class BfsDialog : public QDialog {
     Q_OBJECT
 
 public:

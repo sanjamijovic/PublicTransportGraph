@@ -4,6 +4,7 @@
 class Node {
 public:
     virtual std::string label() const = 0;
+
     virtual ~Node() = default;
 };
 

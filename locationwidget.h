@@ -4,11 +4,10 @@
 #include <QDialog>
 
 namespace Ui {
-class LocationWidget;
+    class LocationWidget;
 }
 
-class LocationWidget : public QDialog
-{
+class LocationWidget : public QDialog {
     Q_OBJECT
 
 public:

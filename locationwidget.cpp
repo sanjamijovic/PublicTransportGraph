@@ -2,28 +2,23 @@
 #include "ui_locationwidget.h"
 
 LocationWidget::LocationWidget(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::LocationWidget)
-{
+        QDialog(parent),
+        ui(new Ui::LocationWidget) {
     ui->setupUi(this);
 }
 
-LocationWidget::~LocationWidget()
-{
+LocationWidget::~LocationWidget() {
     delete ui;
 }
 
-QString LocationWidget::getLatitude() const
-{
+QString LocationWidget::getLatitude() const {
     return ui->latitude->text();
 }
 
-QString LocationWidget::getLongitude() const
-{
+QString LocationWidget::getLongitude() const {
     return ui->longitude->text();
 }
 
-QString LocationWidget::getLine() const
-{
+QString LocationWidget::getLine() const {
     return ui->lineName->text();
 }

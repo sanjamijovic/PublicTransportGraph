@@ -1,17 +1,16 @@
 #ifndef PUBLICTRANSPORTGRAPH_BUSLINE_H
 #define PUBLICTRANSPORTGRAPH_BUSLINE_H
 
-
+#include <map>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
-#include <map>
-#include <set>
 
 #include "linedirection.h"
-#include "ptrcomparator.h"
-#include "node.h"
 #include "network.h"
+#include "node.h"
+#include "ptrcomparator.h"
 
 class BusStop;
 
@@ -19,34 +18,38 @@ class BusLine : public Node {
 
 public:
     friend class LineInfoWindow;
-    enum Directions { DIRECTION_A, DIRECTION_B };
 
-    BusLine(const std::string& lineName, const std::string& firstStop, const std::string& lastStop);
+    enum Directions {
+        DIRECTION_A,
+        DIRECTION_B
+    };
 
-    void setName(const std::string& lineName);
-    void setFirstStop(const std::string& firstStop);
-    void setLastStop(const std::string& lastStop);
+    BusLine(const std::string &lineName, const std::string &firstStop, const std::string &lastStop);
+
+    void setName(const std::string &lineName);
+    void setFirstStop(const std::string &firstStop);
+    void setLastStop(const std::string &lastStop);
     unsigned long getNumberOfStops(Directions direction) const;
     int getNumberOfStopsInZone(int zoneID);
     unsigned long getNumberOfAllStops() const;
     int getLineNumber() const;
-    const std::string& getName() const;
-    const std::string& getFirstStop() const;
-    const std::string& getLastStop() const;
+    const std::string &getName() const;
+    const std::string &getFirstStop() const;
+    const std::string &getLastStop() const;
 
-    void addStop(BusStop* stop, Directions direction);
-    void removeStop(BusStop* stop, Directions direction);
+    void addStop(BusStop *stop, Directions direction);
+    void removeStop(BusStop *stop, Directions direction);
     void removeAllStops();
+    friend void Network::removeLine(BusLine *);
 
     std::set<BusLine *, PtrComparator> linesWithMutualStops();
-    BusLine* lineWithMostMutualStops();
-    bool hasStopsInOneDirection(BusStop* firstStop, BusStop* secondStop) const;
-    BusStop* nextStopInDirection(BusStop* stop, Directions direction);
-    static unsigned long numOfMutualStops(BusLine*, BusLine*);
+    BusLine *lineWithMostMutualStops();
+    bool hasStopsInOneDirection(BusStop *firstStop, BusStop *secondStop) const;
+    BusStop *nextStopInDirection(BusStop *stop, Directions direction);
+    static unsigned long numOfMutualStops(BusLine *, BusLine *);
 
-    friend bool operator<(const BusLine& line1, const BusLine& line2);
-    friend std::ostream& operator<<(std::ostream &os, const BusLine &line);
-    friend void Network::removeLine(BusLine *);
+    friend bool operator<(const BusLine &line1, const BusLine &line2);
+    friend std::ostream &operator<<(std::ostream &os, const BusLine &line);
 
     std::string label() const override;
 
@@ -58,8 +61,8 @@ private:
     std::map<int, int> numberOfStopsInZone_;
 
     int getLineNumberFromLineName();
-    std::set<BusStop*> getAllStops();
-};
 
+    std::set<BusStop *> getAllStops();
+};
 
 #endif //PUBLICTRANSPORTGRAPH_BUSLINE_H

@@ -2,23 +2,19 @@
 #include "ui_changelinename.h"
 
 ChangeLineName::ChangeLineName(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ChangeLineName)
-{
+        QDialog(parent),
+        ui(new Ui::ChangeLineName) {
     ui->setupUi(this);
 }
 
-ChangeLineName::~ChangeLineName()
-{
+ChangeLineName::~ChangeLineName() {
     delete ui;
 }
 
-QString ChangeLineName::oldName() const
-{
+QString ChangeLineName::oldName() const {
     return ui->oldLine->text();
 }
 
-QString ChangeLineName::newName() const
-{
+QString ChangeLineName::newName() const {
     return ui->newLine->text();
 }

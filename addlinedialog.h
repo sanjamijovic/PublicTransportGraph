@@ -6,26 +6,25 @@
 class Network;
 
 namespace Ui {
-class AddLineDialog;
+    class AddLineDialog;
 }
 
 class MainWindow;
 
-class AddLineDialog : public QDialog
-{
+class AddLineDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit AddLineDialog(Network& network, std::function<void(void)> draw, bool* valid, QWidget* parent = 0);
+    explicit AddLineDialog(Network &network, std::function<void(void)> draw, bool *valid, QWidget *parent = 0);
     ~AddLineDialog();
 
 private:
     Ui::AddLineDialog *ui;
-    Network& network_;
+    Network &network_;
     QString fileNameDirectionA = "";
     QString fileNameDirectionB = "";
     std::function<void(void)> draw_;
-    bool* valid_;
+    bool *valid_;
 
 private slots:
     void acc();

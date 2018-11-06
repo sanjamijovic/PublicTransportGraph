@@ -5,8 +5,8 @@
 
 class GmlOutput : public OutputFileFormater {
 public:
-    GmlOutput(const GraphFormatGenerator&, const std::string&);
-    std::string formatType() const override ;
+    GmlOutput(const GraphFormatGenerator &, const std::string &);
+    std::string formatType() const override;
     virtual void makeFile() override;
 };
 

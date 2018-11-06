@@ -6,34 +6,30 @@
 #include <sstream>
 #include <QMessageBox>
 
-ConnectedLinesDialog::ConnectedLinesDialog(Network& network, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::ConnectedLinesDialog),
-    network_(network)
-{
+ConnectedLinesDialog::ConnectedLinesDialog(Network &network, QWidget *parent) :
+        QDialog(parent),
+        ui(new Ui::ConnectedLinesDialog),
+        network_(network) {
     ui->setupUi(this);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(acc()));
 }
 
-ConnectedLinesDialog::~ConnectedLinesDialog()
-{
+ConnectedLinesDialog::~ConnectedLinesDialog() {
     delete ui;
 }
 
-void ConnectedLinesDialog::acc()
-{
+void ConnectedLinesDialog::acc() {
     auto line = network_.getLine(ui->lineName->text().toStdString());
-    if(line == nullptr) {
-        QMessageBox* message = new QMessageBox();
+    if (line == nullptr) {
+        QMessageBox *message = new QMessageBox();
         message->setText("Line not valid");
         message->show();
-    }
-    else{
+    } else {
         auto result = line->linesWithMutualStops();
         std::stringstream ss;
-        for(auto l : result)
+        for (auto l : result)
             ss << *l << std::endl;
-        TextWidget* text = new TextWidget(QString::fromStdString(ss.str()));
+        TextWidget *text = new TextWidget(QString::fromStdString(ss.str()));
         text->show();
     }
 }

@@ -4,11 +4,11 @@
 #include <exception>
 #include <string>
 
-class InvalidFile : public std::exception
-{
+class InvalidFile : public std::exception {
 public:
-    InvalidFile(const std::string& message);
-    const char* what() const noexcept;
+    InvalidFile(const std::string &message);
+    const char *what() const noexcept;
+
 private:
     std::string message_;
 };

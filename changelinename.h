@@ -4,11 +4,10 @@
 #include <QDialog>
 
 namespace Ui {
-class ChangeLineName;
+    class ChangeLineName;
 }
 
-class ChangeLineName : public QDialog
-{
+class ChangeLineName : public QDialog {
     Q_OBJECT
 
 public:

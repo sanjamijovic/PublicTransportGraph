@@ -3,30 +3,29 @@
 #include "graphformatgenerator.h"
 #include "node.h"
 
-CsvOutput::CsvOutput(const GraphFormatGenerator & generator, const std::string & fileName, Type type)
+CsvOutput::CsvOutput(const GraphFormatGenerator &generator, const std::string &fileName, Type type)
         : OutputFileFormater(generator, fileName),
-          type_(type)
-{}
+          type_(type) {}
 
 std::string CsvOutput::formatType() const {
     return "CSV";
 }
 
 void CsvOutput::makeFile() {
-    if(file_.is_open()) {
+    if (file_.is_open()) {
         auto nodes = generator_.getNodes();
-        switch(type_) {
+        switch (type_) {
             case EDGES_TABLE :
                 file_ << "source;target" << std::endl;
 
-                for(auto node : nodes) {
+                for (auto node : nodes) {
                     auto connectedNodes = generator_.edges(node);
-                    for(auto connectedNode : connectedNodes)
+                    for (auto connectedNode : connectedNodes)
                         file_ << node->label() << ";" << connectedNode->label() << std::endl;
                 }
                 break;
             case ADJACENCY_LIST:
-                for(auto node : nodes) {
+                for (auto node : nodes) {
                     file_ << node->label();
                     auto connectedNodes = generator_.edges(node);
                     for (auto connectedNode : connectedNodes) {
@@ -38,15 +37,15 @@ void CsvOutput::makeFile() {
                 break;
             case MATRIX :
 
-                for(auto node : nodes)
+                for (auto node : nodes)
                     file_ << ";" << node->label();
                 file_ << std::endl;
 
-                for(auto node : nodes) {
+                for (auto node : nodes) {
                     file_ << node->label();
                     auto connectedNodes = generator_.edges(node);
-                    for(auto otherNode : nodes) {
-                        if(std::find(connectedNodes.begin(), connectedNodes.end(), otherNode) != connectedNodes.end())
+                    for (auto otherNode : nodes) {
+                        if (std::find(connectedNodes.begin(), connectedNodes.end(), otherNode) != connectedNodes.end())
                             file_ << ";1";
                         else
                             file_ << ";0";
@@ -60,7 +59,6 @@ void CsvOutput::makeFile() {
 
 
         file_.close();
-    }
-    else
+    } else
         std::cout << "File not found." << std::endl;
 }

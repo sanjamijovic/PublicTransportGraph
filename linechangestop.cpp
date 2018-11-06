@@ -4,9 +4,8 @@
 #include <QRadioButton>
 
 LineChangeStop::LineChangeStop(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::LineChangeStop)
-{
+        QDialog(parent),
+        ui(new Ui::LineChangeStop) {
     ui->setupUi(this);
     ui->addButton->setChecked(true);
     ui->direction->addItem(tr("Direction A"));
@@ -18,62 +17,50 @@ LineChangeStop::LineChangeStop(QWidget *parent) :
     connect(ui->removeButton, SIGNAL(toggled(bool)), SLOT(remove()));
 }
 
-LineChangeStop::~LineChangeStop()
-{
+LineChangeStop::~LineChangeStop() {
     delete ui;
 }
 
-QString LineChangeStop::getDirection() const
-{
+QString LineChangeStop::getDirection() const {
     return clickedDirection;
 }
 
-QString LineChangeStop::getline() const
-{
+QString LineChangeStop::getline() const {
     return ui->line->text();
 }
 
-QString LineChangeStop::getStop() const
-{
+QString LineChangeStop::getStop() const {
     return ui->stop->text();
 }
 
-QString LineChangeStop::getAction() const
-{
+QString LineChangeStop::getAction() const {
     return (ui->addButton->isChecked() ? ui->addButton->text() : ui->removeButton->text());
 }
 
-QString LineChangeStop::getStopName() const
-{
+QString LineChangeStop::getStopName() const {
     return ui->stopName->text();
 }
 
-QString LineChangeStop::getLatitude() const
-{
+QString LineChangeStop::getLatitude() const {
     return ui->latitude->text();
 }
 
-QString LineChangeStop::getLongitude() const
-{
+QString LineChangeStop::getLongitude() const {
     return ui->longitude->text();
 }
 
-QString LineChangeStop::getZone() const
-{
+QString LineChangeStop::getZone() const {
     return ui->zone->text();
 }
 
-void LineChangeStop::direction(int val)
-{
+void LineChangeStop::direction(int val) {
     clickedDirection = ui->direction->currentText();
 }
 
-void LineChangeStop::add()
-{
+void LineChangeStop::add() {
     ui->stopInfoBox->setVisible(true);
 }
 
-void LineChangeStop::remove()
-{
+void LineChangeStop::remove() {
     ui->stopInfoBox->setVisible(false);
 }

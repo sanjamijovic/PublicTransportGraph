@@ -5,12 +5,12 @@
 
 class LGraphGenerator : public GraphFormatGenerator {
 public:
-    explicit LGraphGenerator(Network&);
+    explicit LGraphGenerator(Network &);
     bool directed() const override;
-    std::set<Node *> edges(Node* source) const override ;
+    std::set<Node *> edges(Node *source) const override;
 
 protected:
-    void loadNodes() override ;
+    void loadNodes() override;
 };
 
 #endif //PUBLICTRANSPORTGRAPH_LGRAPHGENERATOR_H

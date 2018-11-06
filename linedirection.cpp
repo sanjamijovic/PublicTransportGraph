@@ -11,8 +11,7 @@ void LineDirection::remove(BusStop *stop) {
     stops_.erase(std::remove(stops_.begin(), stops_.end(), stop), stops_.end());
 }
 
-void LineDirection::removeAllStops()
-{
+void LineDirection::removeAllStops() {
     stops_.clear();
 }
 
@@ -30,8 +29,7 @@ bool LineDirection::hasStops(BusStop *firstStop, BusStop *secondStop) const {
     return !(firstResult == stops_.end() || secondResult == stops_.end());
 }
 
-bool LineDirection::hasStop(BusStop *stop) const
-{
+bool LineDirection::hasStop(BusStop *stop) const {
     return std::find(stops_.begin(), stops_.end(), stop) != stops_.end();
 }
 

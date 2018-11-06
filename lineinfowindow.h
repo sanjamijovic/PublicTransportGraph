@@ -1,28 +1,29 @@
 #ifndef LINEINFOWINDOW_H
 #define LINEINFOWINDOW_H
 
-#include <string>
-#include <QWidget>
 #include "busline.h"
 #include "directiontabwidget.h"
+#include <QWidget>
+#include <string>
 
 class LineDirection;
 
 namespace Ui {
-class LineInfoWindow;
+    class LineInfoWindow;
 }
 
-class LineInfoWindow : public QWidget
-{
+class LineInfoWindow : public QWidget {
     Q_OBJECT
+
 public:
-    LineInfoWindow(BusLine* line, QWidget *parent = nullptr);
+    LineInfoWindow(BusLine *line, QWidget *parent = nullptr);
     virtual ~LineInfoWindow();
 
 private:
-    BusLine* line_;
+    BusLine *line_;
     Ui::LineInfoWindow *ui;
-    void makeTable(DirectionTabWidget*, BusLine::Directions);
+
+    void makeTable(DirectionTabWidget *, BusLine::Directions);
 };
 
 #endif // LINEINFOWINDOW_H

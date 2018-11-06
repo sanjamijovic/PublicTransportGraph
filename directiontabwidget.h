@@ -1,22 +1,21 @@
 #ifndef DIRECTIONTABWIDGET_H
 #define DIRECTIONTABWIDGET_H
 
-#include <QWidget>
 #include <QTableWidget>
+#include <QWidget>
 
 namespace Ui {
-class DirectionTabWidget;
+    class DirectionTabWidget;
 }
 
-class DirectionTabWidget : public QWidget
-{
+class DirectionTabWidget : public QWidget {
     Q_OBJECT
 
 public:
     explicit DirectionTabWidget(QWidget *parent = 0);
     ~DirectionTabWidget();
 
-    QTableWidget* stopsTable();
+    QTableWidget *stopsTable();
 
 private:
     Ui::DirectionTabWidget *ui;

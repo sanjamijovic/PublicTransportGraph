@@ -7,7 +7,7 @@
 
 TextParser::TextParser(Network &network) : network_(network) {}
 
-void TextParser::collectData(const std::string &fileName, bool& valid) {
+void TextParser::collectData(const std::string &fileName, bool &valid) {
     std::ifstream file(fileName);
 
     std::string errorMessages;
@@ -40,7 +40,7 @@ void TextParser::collectData(const std::string &fileName, bool& valid) {
                 try {
                     collectStopsData(lineFileName + "A.txt", newLine, BusLine::Directions::DIRECTION_A);
                     collectStopsData(lineFileName + "B.txt", newLine, BusLine::Directions::DIRECTION_B);
-                } catch(InvalidFile& e) {
+                } catch (InvalidFile &e) {
                     errorMessages += e.what();
                     errorMessages += '\n';
                 }

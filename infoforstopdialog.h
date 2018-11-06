@@ -6,22 +6,22 @@
 class Network;
 
 namespace Ui {
-class LineForStopDialog;
+    class LineForStopDialog;
 }
 
-class InfoForStopDialog : public QDialog
-{
+class InfoForStopDialog : public QDialog {
     Q_OBJECT
 
 public:
     // stops = false shows lines
-    explicit InfoForStopDialog(bool stops, Network& network, QWidget *parent = 0);
+    explicit InfoForStopDialog(bool stops, Network &network, QWidget *parent = 0);
     ~InfoForStopDialog();
 
 private:
     Ui::LineForStopDialog *ui;
-    Network& network_;
+    Network &network_;
     bool stops_;
+
 private slots:
     void acc();
 };

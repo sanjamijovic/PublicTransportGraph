@@ -4,14 +4,13 @@
 #include "graphformatgenerator.h"
 
 class CGraphGenerator : public GraphFormatGenerator {
-        public:
-        explicit CGraphGenerator(Network&);
-        bool directed() const override;
-        std::set<Node *> edges(Node* source) const override ;
+public:
+    explicit CGraphGenerator(Network &);
+    bool directed() const override;
+    std::set<Node *> edges(Node *source) const override;
 
-        protected:
-        void loadNodes() override ;
-    };
-
+protected:
+    void loadNodes() override;
+};
 
 #endif //PUBLICTRANSPORTGRAPH_CGRAPHGENERATOR_H

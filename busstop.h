@@ -1,34 +1,33 @@
 #ifndef PUBLICTRANSPORTGRAPH_BUSSTOP_H
 #define PUBLICTRANSPORTGRAPH_BUSSTOP_H
 
-#include <string>
-#include <set>
-#include <iostream>
-#include "location.h"
 #include "busline.h"
-#include "node.h"
+#include "location.h"
 #include "network.h"
+#include "node.h"
+#include <iostream>
+#include <set>
+#include <string>
 
 class BusStop : public Node {
 public:
-
-    BusStop(int stopID, const std::string& stopName, Location location, int zoneID);
+    BusStop(int stopID, const std::string &stopName, Location location, int zoneID);
 
     int getStopID_() const;
-    const std::string& getStopName_() const;
+    const std::string &getStopName_() const;
     int getZoneID_() const;
     const Location &getLocation_() const;
 
-    std::set<BusLine*> getLines();
-    bool isStopForLine(BusLine*);
+    std::set<BusLine *> getLines();
+    bool isStopForLine(BusLine *);
 
-    friend void BusLine::addStop(BusStop* stop, Directions direction);
-    friend void BusLine::removeStop(BusStop* stop, Directions direction);
+    friend void BusLine::addStop(BusStop *stop, Directions direction);
+    friend void BusLine::removeStop(BusStop *stop, Directions direction);
     friend void BusLine::removeAllStops();
     friend void Network::removeLine(BusLine *);
 
-    friend bool operator<(const BusStop& stop1, const BusStop& stop2);
-    friend std::ostream& operator<<(std::ostream&, const BusStop&);
+    friend bool operator<(const BusStop &stop1, const BusStop &stop2);
+    friend std::ostream &operator<<(std::ostream &, const BusStop &);
 
     std::string label() const override;
 
@@ -42,6 +41,5 @@ private:
     void addLine(BusLine *line);
     void removeLine(BusLine *line);
 };
-
 
 #endif //PUBLICTRANSPORTGRAPH_BUSSTOP_H

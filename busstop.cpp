@@ -4,8 +4,7 @@ BusStop::BusStop(int stopID, const std::string &stopName, Location location, int
         stopID_(stopID),
         stopName_(stopName),
         location_(location),
-        zoneID_(zoneID)
-{}
+        zoneID_(zoneID) {}
 
 int BusStop::getStopID_() const {
     return stopID_;
@@ -28,14 +27,14 @@ bool operator<(const BusStop &stop1, const BusStop &stop2) {
 }
 
 std::ostream &operator<<(std::ostream &os, const BusStop &s) {
-    return os << s.stopID_ << " " << s.stopName_ << " " << s.location_ << " " << s.zoneID_ ;
+    return os << s.stopID_ << " " << s.stopName_ << " " << s.location_ << " " << s.zoneID_;
 }
 
 std::set<BusLine *> BusStop::getLines() {
     return lines_;
 }
 
-bool BusStop::isStopForLine(BusLine * line) {
+bool BusStop::isStopForLine(BusLine *line) {
     return lines_.find(line) != lines_.end();
 }
 

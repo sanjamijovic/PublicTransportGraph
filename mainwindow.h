@@ -6,22 +6,22 @@
 #include "network.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(Network& network, QWidget *parent = 0);
+    MainWindow(Network &network, QWidget *parent = 0);
+
     ~MainWindow();
 
-    void closeEvent(QCloseEvent*) override;
+    void closeEvent(QCloseEvent *) override;
 
 private:
     Ui::MainWindow *ui;
-    Network& network_;
+    Network &network_;
     bool exported = true;
 
     QMenu *fileMenu;
@@ -50,7 +50,7 @@ private:
 
 private slots:
     void open();
-    void handleButton(const std::string& lineName);
+    void handleButton(const std::string &lineName);
     void save();
     void newLine();
     void filter();
@@ -67,8 +67,6 @@ private slots:
     void nearestStop();
     void shortestPath();
     void smallestStopovers();
-
-
 };
 
 #endif // MAINWINDOW_H

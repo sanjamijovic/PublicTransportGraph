@@ -11,16 +11,14 @@ void Network::addLine(BusLine *line) {
     busLines_.insert(line);
 }
 
-void Network::removeLine(BusLine *line)
-{
-    for(auto stop : line->getAllStops())
+void Network::removeLine(BusLine *line) {
+    for (auto stop : line->getAllStops())
         stop->removeLine(line);
     busLines_.erase(line);
     delete line;
 }
 
-void Network::changeLineName(BusLine* line, const std::string & name)
-{
+void Network::changeLineName(BusLine *line, const std::string &name) {
     busLines_.erase(line);
     line->setName(name);
     busLines_.insert(line);
@@ -46,9 +44,9 @@ BusStop *Network::getStop(int stopID) {
     return iter->second;
 }
 
-std::vector<std::string>  Network::getAllLineNames() const {
-    std::vector<std::string>  result;
-    for(auto line : busLines_)
+std::vector <std::string> Network::getAllLineNames() const {
+    std::vector <std::string> result;
+    for (auto line : busLines_)
         result.push_back(line->getName());
     return result;
 }
@@ -105,33 +103,34 @@ void Network::filterIf(std::function<bool(std::set<BusLine *>::iterator)> condit
 
 // calculates the nearest stop to location, if line passed must be a stop of that line
 BusStop *Network::nearestStopToLocation(Location location, BusLine *line) {
-    if(line && line->getNumberOfAllStops() == 0)
+    if (line && line->getNumberOfAllStops() == 0)
         return nullptr;
-    std::vector<BusStop*> stopsOfLine;
+    std::vector <BusStop *> stopsOfLine;
 
-    for(auto iter : allBusStops_) {
-        if(!line || iter.second->isStopForLine(line))
+    for (auto iter : allBusStops_) {
+        if (!line || iter.second->isStopForLine(line))
             stopsOfLine.push_back(iter.second);
     }
 
-    auto result = std::min_element(stopsOfLine.begin(), stopsOfLine.end(), [location](BusStop* stop1, BusStop* stop2) {
-        return Location::distance(location, stop1->getLocation_()) < Location::distance(location, stop2->getLocation_());
+    auto result = std::min_element(stopsOfLine.begin(), stopsOfLine.end(), [location](BusStop *stop1, BusStop *stop2) {
+        return Location::distance(location, stop1->getLocation_()) <
+               Location::distance(location, stop2->getLocation_());
     });
-    if(result == stopsOfLine.end())
+    if (result == stopsOfLine.end())
         return nullptr;
     return *result;
 
 }
 
 std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
-    std::set<BusStop *, PtrComparator> result;
+    std::set < BusStop * , PtrComparator > result;
     auto lines = stop->getLines();
     for (auto line : lines) {
         auto nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_A);
-        if(nextStop)
+        if (nextStop)
             result.insert(nextStop);
         nextStop = line->nextStopInDirection(stop, BusLine::DIRECTION_B);
-        if(nextStop)
+        if (nextStop)
             result.insert(nextStop);
 
     }
@@ -139,37 +138,37 @@ std::set<BusStop *, PtrComparator> Network::allNextStops(BusStop *stop) {
     return result;
 }
 
-std::vector<Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLines(unsigned long minStops) {
-    std::vector<pairsOfConnectedLines> result;
-    for(auto line1 : busLines_) {
+std::vector <Network::pairsOfConnectedLines> Network::mutualStopsForAllPairsOfLines(unsigned long minStops) {
+    std::vector <pairsOfConnectedLines> result;
+    for (auto line1 : busLines_) {
         auto linesWithMutualStops = line1->linesWithMutualStops();
-        for(auto line2 : linesWithMutualStops) {
+        for (auto line2 : linesWithMutualStops) {
             unsigned long numOfMutualStops = BusLine::numOfMutualStops(line1, line2);
             if (*line1 < *line2 && numOfMutualStops >= minStops)
                 result.push_back(std::make_pair(std::make_pair(line1, line2), numOfMutualStops));
         }
     }
 
-    std::sort(result.begin(), result.end(), [] (const pairsOfConnectedLines& pair1, const pairsOfConnectedLines& pair2) {
+    std::sort(result.begin(), result.end(), [](const pairsOfConnectedLines &pair1, const pairsOfConnectedLines &pair2) {
         return *pair1.first.first < *pair2.first.first;
     });
 
     return result;
 }
 
-unsigned long Network::shortestPath(BusStop * first, BusStop * last) {
-    std::map<BusStop*, unsigned long> visitedStops; // keeps the number of stops in path for visited stops
-    std::queue<BusStop *> stops;
+unsigned long Network::shortestPath(BusStop *first, BusStop *last) {
+    std::map < BusStop * , unsigned long > visitedStops; // keeps the number of stops in path for visited stops
+    std::queue <BusStop *> stops;
 
-    visitedStops[first] =  0;
+    visitedStops[first] = 0;
     stops.push(first);
-    while(!stops.empty()) {
-        BusStop* currentStop = stops.front();
+    while (!stops.empty()) {
+        BusStop *currentStop = stops.front();
         stops.pop();
 
         auto nextStops = allNextStops(currentStop);
-        for(auto nextStop : nextStops) {
-            if(nextStop == last)
+        for (auto nextStop : nextStops) {
+            if (nextStop == last)
                 return visitedStops[currentStop] + 1;
             if (visitedStops.count(nextStop) == 0) {
                 visitedStops[nextStop] = visitedStops[currentStop] + 1;
@@ -180,25 +179,25 @@ unsigned long Network::shortestPath(BusStop * first, BusStop * last) {
     return ULONG_MAX;
 }
 
-unsigned long Network::numOfStopovers(BusStop * first, BusStop * last) {
-    std::map<BusLine*, unsigned long> visitedLines; // keeps the number of overlays in path for visited lines
-    std::queue<BusLine *> lines;
+unsigned long Network::numOfStopovers(BusStop *first, BusStop *last) {
+    std::map < BusLine * , unsigned long > visitedLines; // keeps the number of overlays in path for visited lines
+    std::queue <BusLine *> lines;
 
-    auto linesForStop= first->getLines();
+    auto linesForStop = first->getLines();
     for (auto line : linesForStop) {
-        if(last->isStopForLine(line))
+        if (last->isStopForLine(line))
             return 0;
         visitedLines[line] = 0;
         lines.push(line);
     }
 
-    while(!lines.empty()) {
-        BusLine* currentLine = lines.front();
+    while (!lines.empty()) {
+        BusLine *currentLine = lines.front();
         lines.pop();
 
         auto connectedLines = currentLine->linesWithMutualStops();
-        for(auto line : connectedLines) {
-            if(last->isStopForLine(line))
+        for (auto line : connectedLines) {
+            if (last->isStopForLine(line))
                 return visitedLines[line] + 1;
             if (visitedLines.count(line) == 0) {
                 visitedLines[line] = visitedLines[currentLine] + 1;
@@ -210,8 +209,7 @@ unsigned long Network::numOfStopovers(BusStop * first, BusStop * last) {
     return ULONG_MAX;
 }
 
-void Network::clear()
-{
+void Network::clear() {
     for (auto l : busLines_)
         delete l;
 

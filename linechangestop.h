@@ -4,11 +4,10 @@
 #include <QDialog>
 
 namespace Ui {
-class LineChangeStop;
+    class LineChangeStop;
 }
 
-class LineChangeStop : public QDialog
-{
+class LineChangeStop : public QDialog {
     Q_OBJECT
 
 public:
@@ -28,6 +27,7 @@ public:
 private:
     Ui::LineChangeStop *ui;
     QString clickedDirection;
+
 private slots:
     void direction(int);
     void add();
